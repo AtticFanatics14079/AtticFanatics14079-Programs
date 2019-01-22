@@ -1,0 +1,33 @@
+ECLIPSE ANDROID PROJECT IMPORT SUMMARY
+======================================
+
+ * Project OpenCV Library - @OPENCV_VERSION@:C:\Users\Jonathan\Downloads\OpenCV Try
+   3\opencv\sources\modules\java\android_sdk\android_lib\.classpath:
+   Could not resolve source path src in project OpenCV Library -
+   @OPENCV_VERSION@: ignored. The project may not compile if the given source
+   path provided source code.
+
+
+Moved Files:
+------------
+Android Gradle projects use a different directory structure than ADT
+Eclipse projects. Here's how the projects were restructured:
+
+* AndroidManifest.xml => openCVLibraryOPENCV_VERSION\src\main\AndroidManifest.xml
+* lint.xml => openCVLibraryOPENCV_VERSION\lint.xml
+* res\ => openCVLibraryOPENCV_VERSION\src\main\res\
+
+Next Steps:
+-----------
+You can now build the project. The Gradle project needs network
+connectivity to download dependencies.
+
+Bugs:
+-----
+If for some reason your project does not build, and you determine that
+it is due to a bug or limitation of the Eclipse to Gradle importer,
+please file a bug at http://b.android.com with category
+Component-Tools.
+
+(This import summary is for your information only, and can be deleted
+after import once you are satisfied with the results.)
