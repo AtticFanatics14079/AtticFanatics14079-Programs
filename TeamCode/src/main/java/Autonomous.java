@@ -54,7 +54,7 @@ import java.util.Locale;
  *
  * @see <a href="http://www.adafruit.com/products/2472">Adafruit IMU</a>
  */
-@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name = "AutonomousRard", group = "Sensor")
+@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name = "AutonomousTreads", group = "Sensor")
 //@Disabled
 public class Autonomous extends LinearOpMode
     {
@@ -116,9 +116,7 @@ public class Autonomous extends LinearOpMode
         imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
 
         // Loop and update the dashboard
-        TurnUsingIMU(80);
-        left_motor.setPower(0);
-        right_motor.setPower(0);
+        TurnUsingIMU(-120);
     }
 
     //----------------------------------------------------------------------------------------------
@@ -253,7 +251,7 @@ public class Autonomous extends LinearOpMode
 
             angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
-            double Ticks = Degrees * 28.28;
+            double Ticks = Degrees * 32;
 
             left_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             right_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -261,7 +259,7 @@ public class Autonomous extends LinearOpMode
             left_motor.setTargetPosition((int) (-1 * Ticks));
             right_motor.setTargetPosition((int) Ticks);
 
-            double TurnAmount = angles.firstAngle;
+            double TurnAmount;
 
             left_motor.setPower(-1);
             right_motor.setPower(1);
@@ -269,23 +267,54 @@ public class Autonomous extends LinearOpMode
             while (left_motor.isBusy() || right_motor.isBusy())
             {
                 telemetry.update();
-                TurnAmount = angles.firstAngle;
-            };
+            }
 
             while (opModeIsActive()) {
-                if (Degrees - TurnAmount > -0.5 && Degrees - TurnAmount < 0.5) {
+
+                telemetry.update();
+                TurnAmount = angles.firstAngle;
+                if (Degrees - TurnAmount > -2 && Degrees - TurnAmount < 2) {
+
                     left_motor.setPower(0);
                     right_motor.setPower(0);
                     break;
-                } else if (Degrees - TurnAmount >= 0.5) {
-                    left_motor.setTargetPosition((int) ((-1 * Ticks) + 28.28 * (Degrees - TurnAmount)));
-                    right_motor.setTargetPosition((int) ((-1 * Ticks) + 28.28 * (Degrees - TurnAmount)));
+                }
+                else if ((Degrees - TurnAmount >= 2) && (TurnAmount >= 0)) {
+
+                    ResetMotorEncoders();
+
+                    left_motor.setTargetPosition((int) (-3 * (Degrees - TurnAmount)));
+                    right_motor.setTargetPosition((int) (3 * (Degrees - TurnAmount)));
 
                     left_motor.setPower(-1);
                     right_motor.setPower(1);
-                } else {
-                    left_motor.setTargetPosition((int) ((-1 * Ticks) + 28.28 * (Degrees - TurnAmount)));
-                    right_motor.setTargetPosition((int) ((-1 * Ticks) + 28.28 * (Degrees - TurnAmount)));
+                }
+                else if (Degrees - TurnAmount <= -2){
+
+                    ResetMotorEncoders();
+
+                    left_motor.setTargetPosition((int) (3 * (Degrees - TurnAmount)));
+                    right_motor.setTargetPosition((int) (-3 * (Degrees - TurnAmount)));
+
+                    left_motor.setPower(1);
+                    right_motor.setPower(-1);
+                }
+                else if (-1 * Degrees + TurnAmount <= -2){
+
+                    ResetMotorEncoders();
+
+                    left_motor.setTargetPosition((int) (-3 * (Degrees - TurnAmount)));
+                    right_motor.setTargetPosition((int) (3 * (Degrees - TurnAmount)));
+
+                    left_motor.setPower(-1);
+                    right_motor.setPower(1);
+                }
+                else {
+
+                    ResetMotorEncoders();
+
+                    left_motor.setTargetPosition((int) (3 * (Degrees - TurnAmount)));
+                    right_motor.setTargetPosition((int) (-3 * (Degrees - TurnAmount)));
 
                     left_motor.setPower(1);
                     right_motor.setPower(-1);
