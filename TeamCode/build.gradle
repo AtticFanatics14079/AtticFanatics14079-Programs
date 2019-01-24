@@ -7,9 +7,18 @@
 // the build definitions, you can place those customizations in this file, but
 // please think carefully as to whether such customizations are really necessary
 // before doing so.
-
-
 // Custom definitions may go here
-
 // Include common definitions from above.
 apply from: '../build.common.gradle'
+dependencies {
+    implementation project(':OpenCV')
+}
+android {
+    defaultConfig {
+        minSdkVersion 28
+        targetSdkVersion 28
+    }
+    productFlavors {
+    }
+    compileSdkVersion 28
+}
