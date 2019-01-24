@@ -120,7 +120,7 @@ public class Autonomous extends LinearOpMode
         imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
 
         // Loop and update the dashboard
-        TurnUsingIMU(-91);
+        TurnUsingIMU(-90);
     }
 
     //----------------------------------------------------------------------------------------------
