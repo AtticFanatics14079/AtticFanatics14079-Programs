@@ -21,4 +21,13 @@ android {
     productFlavors {
     }
     compileSdkVersion 28
+    sourceSets {
+        main {
+            manifest.srcFile 'src/main/AndroidManifest.xml'
+        
+
+
+
+        }
+    }
 }
