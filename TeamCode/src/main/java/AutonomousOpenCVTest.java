@@ -29,6 +29,7 @@
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase.CvCameraViewFrame;
+import org.opencv.android.JavaCameraView;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Core;
@@ -89,7 +90,9 @@ public class AutonomousOpenCVTest extends LinearOpMode
         private DcMotor ingester;
         BNO055IMU imu;
 
-        private Mat A; //EYY ITS AN OPENCV VARIABLE TYPE!!! MEANS PICTURE.
+        JavaCameraView PhoneCamera;
+
+        private Mat Height, Length; //EYY ITS AN OPENCV VARIABLE TYPE!!! MEANS PICTURE.
 
     // State used for updating telemetry
     Orientation angles;
@@ -133,6 +136,10 @@ public class AutonomousOpenCVTest extends LinearOpMode
         right_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lifter_lander.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         ingester.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        PhoneCamera = hardwareMap.get(JavaCameraView.class, "PhoneCamera");
+        PhoneCamera.setVisibility(SurfaceView.VISIBLE);
+        PhoneCamera.setCvCameraViewListener((CameraBridgeViewBase.CvCameraViewListener) this);
 
         // Set up our telemetry dashboard
         composeTelemetry();
