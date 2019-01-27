@@ -103,8 +103,8 @@ public class AutonomousMechanumDogecvVeraMASHUP extends LinearOpMode
         Motor2 = hardwareMap.get(DcMotor.class, "motor_2");
         Motor3 = hardwareMap.get(DcMotor.class, "motor_3");
         Motor4 = hardwareMap.get(DcMotor.class, "motor_4");
-        lifter_lander = hardwareMap.get(DcMotor.class, "lifter");
-        ingester = hardwareMap.get(DcMotor.class, "ingester");
+        //lifter_lander = hardwareMap.get(DcMotor.class, "lifter");
+        //ingester = hardwareMap.get(DcMotor.class, "ingester");
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
 
