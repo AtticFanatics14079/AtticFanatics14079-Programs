@@ -53,8 +53,6 @@ import android.view.WindowManager;
 import android.view.View.OnTouchListener;
 import android.view.SurfaceView;
 
-
-
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -90,7 +88,7 @@ public class AutonomousOpenCVTest extends LinearOpMode
         private DcMotor ingester;
         BNO055IMU imu;
 
-        JavaCameraView PhoneCamera;
+        private JavaCameraView PhoneCamera;
 
         private Mat Height, Length; //EYY ITS AN OPENCV VARIABLE TYPE!!! MEANS PICTURE.
 
@@ -357,6 +355,10 @@ public class AutonomousOpenCVTest extends LinearOpMode
             }
 
         }
+
+        private void UpdatePhoneCamera (Mat Frame){
+
+    }
 
 }
 
