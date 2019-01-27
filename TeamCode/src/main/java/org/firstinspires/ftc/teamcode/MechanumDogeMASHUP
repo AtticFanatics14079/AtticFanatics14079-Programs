@@ -236,6 +236,18 @@ public class AutonomousMechanumDogecvVeraMASHUP extends LinearOpMode
     String formatDegrees(double degrees){
         return String.format(Locale.getDefault(), "%.1f", AngleUnit.DEGREES.normalize(degrees));
     }
+    
+    private void ResetMotorEncoders(){
+        Motor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Motor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Motor3.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Motor4.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Motor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        Motor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        Motor3.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        Motor4.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+    }
 
     private void MoveEncoderTicks(int NumbCM)
         {
