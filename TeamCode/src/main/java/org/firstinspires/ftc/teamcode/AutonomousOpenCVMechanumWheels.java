@@ -1,4 +1,4 @@
-/* Copyright (c) 2017 FIRST. All rights reserved.
+package org.firstinspires.ftc.teamcode;/* Copyright (c) 2017 FIRST. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted (subject to the limitations in the disclaimer below) provided that
@@ -27,31 +27,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.opencv.android.BaseLoaderCallback;
-import org.opencv.android.CameraBridgeViewBase.CvCameraViewFrame;
-import org.opencv.android.JavaCameraView;
-import org.opencv.android.LoaderCallbackInterface;
-import org.opencv.android.OpenCVLoader;
-import org.opencv.core.Core;
-import org.opencv.core.CvType;
-import org.opencv.core.Mat;
-import org.opencv.core.MatOfPoint;
-import org.opencv.core.Rect;
-import org.opencv.core.Scalar;
-import org.opencv.core.Size;
-import org.opencv.android.CameraBridgeViewBase;
-import org.opencv.android.CameraBridgeViewBase.CvCameraViewListener2;
-import org.opencv.imgcodecs.Imgcodecs;
-import org.opencv.imgproc.Imgproc;
-
-import android.app.Activity;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.view.View.OnTouchListener;
 import android.view.SurfaceView;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
@@ -67,6 +42,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
+import org.opencv.android.CameraBridgeViewBase;
+import org.opencv.android.JavaCameraView;
+import org.opencv.core.Mat;
 
 import java.util.Locale;
 
@@ -78,16 +56,18 @@ import java.util.Locale;
  *
  * @see <a href="http://www.adafruit.com/products/2472">Adafruit IMU</a>
  */
-@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name = "AutonomousOpenCV", group = "Sensor")
+@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name = "AutonomousMechanum", group = "Sensor")
 //@Disabled
-public class AutonomousOpenCVTest extends LinearOpMode
+public class AutonomousOpenCVMechanumWheels extends LinearOpMode
     {
 
-        private DcMotor left_motor;
-        private DcMotor right_motor;
-        private DcMotor lifter_lander;
-        private DcMotor ingester;
-        BNO055IMU imu;
+        private DcMotor Motor1 = null;
+        private DcMotor Motor2 = null;
+        private DcMotor Motor3 = null;
+        private DcMotor Motor4 = null;
+        private DcMotor lifter_lander = null;
+        private DcMotor ingester = null;
+        private BNO055IMU imu;
 
         private JavaCameraView PhoneCamera;
 
@@ -119,20 +99,24 @@ public class AutonomousOpenCVTest extends LinearOpMode
         // Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port
         // on a Core Device Interface Module, configured to be a sensor of type "AdaFruit IMU",
         // and named "imu".
-        left_motor = hardwareMap.get(DcMotor.class, "left motor");
-        right_motor = hardwareMap.get(DcMotor.class, "right motor");
+        Motor1 = hardwareMap.get(DcMotor.class, "motor_1");
+        Motor2 = hardwareMap.get(DcMotor.class, "motor_2");
+        Motor3 = hardwareMap.get(DcMotor.class, "motor_3");
+        Motor4 = hardwareMap.get(DcMotor.class, "motor_4");
         lifter_lander = hardwareMap.get(DcMotor.class, "lifter");
         ingester = hardwareMap.get(DcMotor.class, "ingester");
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
 
-        right_motor.setDirection(DcMotor.Direction.FORWARD);
-        left_motor.setDirection(DcMotor.Direction.REVERSE);
+        Motor2.setDirection(DcMotor.Direction.REVERSE);
+        Motor4.setDirection(DcMotor.Direction.REVERSE);
         lifter_lander.setDirection(DcMotor.Direction.FORWARD);
         ingester.setDirection(DcMotor.Direction.FORWARD);
 
-        left_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        right_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        Motor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        Motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        Motor3.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        Motor4.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lifter_lander.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         ingester.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
@@ -229,10 +213,14 @@ public class AutonomousOpenCVTest extends LinearOpMode
     }
 
     private void ResetMotorEncoders(){
-        left_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        right_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        left_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        right_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        Motor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Motor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Motor3.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Motor4.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Motor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        Motor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        Motor3.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        Motor4.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
     }
 
@@ -245,36 +233,51 @@ public class AutonomousOpenCVTest extends LinearOpMode
 
             double TurnAmount;
 
-            left_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            right_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            Motor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            Motor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            Motor3.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            Motor4.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-            int Ticks = NumbCM * 84;
-            left_motor.setTargetPosition(Ticks);
-            right_motor.setTargetPosition(Ticks);
+            int Ticks = NumbCM * 84; //Numbers off, fix using math
 
-            left_motor.setPower(1);
-            right_motor.setPower(1);
+            Motor1.setTargetPosition(Ticks);
+            Motor2.setTargetPosition(Ticks);
+            Motor3.setTargetPosition(Ticks);
+            Motor4.setTargetPosition(Ticks);
 
-            while (left_motor.isBusy() || right_motor.isBusy()) {
+            Motor1.setPower(1);
+            Motor2.setPower(1);
+            Motor3.setPower(1);
+            Motor4.setPower(1);
+
+            while (Motor1.isBusy() || Motor2.isBusy() || Motor3.isBusy() || Motor4.isBusy()) {
                 telemetry.update();
                 TurnAmount = angles.firstAngle;
                 if (TurnAmount > .3) {
-                    right_motor.setPower(.9);
-                    left_motor.setPower(1);
+                    Motor2.setPower(.9);
+                    Motor4.setPower(.9);
+                    Motor1.setPower(1);
+                    Motor3.setPower(1);
                 }
                 else if (TurnAmount < -.3)
                 {
-                    left_motor.setPower(.9);
-                    right_motor.setPower(1);
+                    Motor1.setPower(.9);
+                    Motor3.setPower(.9);
+                    Motor2.setPower(1);
+                    Motor4.setPower(1);
                 }
                 else {
-                    left_motor.setPower(1);
-                    right_motor.setPower(1);
+                    Motor1.setPower(1);
+                    Motor2.setPower(1);
+                    Motor3.setPower(1);
+                    Motor4.setPower(1);
                 }
             }
 
-            left_motor.setPower(0);
-            right_motor.setPower(0);
+            Motor1.setPower(0);
+            Motor2.setPower(0);
+            Motor3.setPower(0);
+            Motor4.setPower(0);
 
         }
 
@@ -285,20 +288,26 @@ public class AutonomousOpenCVTest extends LinearOpMode
 
             angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
-            double Ticks = Degrees * 32;
+            double Ticks = Degrees * 32; //Numbers off, fix using math
 
-            left_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            right_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            Motor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            Motor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            Motor3.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            Motor4.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-            left_motor.setTargetPosition((int) (-1 * Ticks));
-            right_motor.setTargetPosition((int) Ticks);
+            Motor1.setTargetPosition((int) (-1 * Ticks));
+            Motor2.setTargetPosition((int) Ticks);
+            Motor3.setTargetPosition((int) (-1 * Ticks));
+            Motor4.setTargetPosition((int) Ticks);
 
             double TurnAmount;
 
-            left_motor.setPower(-1);
-            right_motor.setPower(1);
+            Motor1.setPower(-1);
+            Motor2.setPower(1);
+            Motor3.setPower(-1);
+            Motor4.setPower(1);
 
-            while (left_motor.isBusy() || right_motor.isBusy())
+            while (Motor1.isBusy() || Motor2.isBusy() || Motor3.isBusy() || Motor4.isBusy())
             {
                 telemetry.update();
             }
@@ -309,56 +318,75 @@ public class AutonomousOpenCVTest extends LinearOpMode
                 TurnAmount = angles.firstAngle;
                 if (Degrees - TurnAmount > -2 && Degrees - TurnAmount < 2) {
 
-                    left_motor.setPower(0);
-                    right_motor.setPower(0);
+                    Motor1.setPower(0);
+                    Motor2.setPower(0);
+                    Motor3.setPower(0);
+                    Motor4.setPower(0);
+
                     break;
                 }
                 else if ((Degrees - TurnAmount >= 2) && (TurnAmount >= 0)) {
 
                     ResetMotorEncoders();
 
-                    left_motor.setTargetPosition((int) (-3 * (Degrees - TurnAmount)));
-                    right_motor.setTargetPosition((int) (3 * (Degrees - TurnAmount)));
+                    Motor1.setTargetPosition((int) (-3 * (Degrees - TurnAmount)));
+                    Motor3.setTargetPosition((int) (-3 * (Degrees - TurnAmount)));
+                    Motor2.setTargetPosition((int) (3 * (Degrees - TurnAmount)));
+                    Motor4.setTargetPosition((int) (3 * (Degrees - TurnAmount)));
 
-                    left_motor.setPower(-1);
-                    right_motor.setPower(1);
+                    Motor1.setPower(-1);
+                    Motor2.setPower(1);
+                    Motor3.setPower(-1);
+                    Motor4.setPower(1);
                 }
                 else if (Degrees - TurnAmount <= -2){
 
                     ResetMotorEncoders();
 
-                    left_motor.setTargetPosition((int) (3 * (Degrees - TurnAmount)));
-                    right_motor.setTargetPosition((int) (-3 * (Degrees - TurnAmount)));
+                    Motor1.setTargetPosition((int) (3 * (Degrees - TurnAmount)));
+                    Motor3.setTargetPosition((int) (3 * (Degrees - TurnAmount)));
+                    Motor2.setTargetPosition((int) (-3 * (Degrees - TurnAmount)));
+                    Motor4.setTargetPosition((int) (-3 * (Degrees - TurnAmount)));
 
-                    left_motor.setPower(1);
-                    right_motor.setPower(-1);
+                    Motor1.setPower(1);
+                    Motor2.setPower(-1);
+                    Motor3.setPower(1);
+                    Motor4.setPower(-1);
                 }
                 else if (-1 * Degrees + TurnAmount <= -2){
 
                     ResetMotorEncoders();
 
-                    left_motor.setTargetPosition((int) (-3 * (Degrees - TurnAmount)));
-                    right_motor.setTargetPosition((int) (3 * (Degrees - TurnAmount)));
+                    Motor1.setTargetPosition((int) (-3 * (Degrees - TurnAmount))); //Numbers off, fix using math.
+                    Motor3.setTargetPosition((int) (-3 * (Degrees - TurnAmount)));
+                    Motor2.setTargetPosition((int) (3 * (Degrees - TurnAmount)));
+                    Motor4.setTargetPosition((int) (3 * (Degrees - TurnAmount)));
 
-                    left_motor.setPower(-1);
-                    right_motor.setPower(1);
+                    Motor1.setPower(-1);
+                    Motor2.setPower(1);
+                    Motor3.setPower(-1);
+                    Motor4.setPower(1);
                 }
                 else {
 
                     ResetMotorEncoders();
 
-                    left_motor.setTargetPosition((int) (3 * (Degrees - TurnAmount)));
-                    right_motor.setTargetPosition((int) (-3 * (Degrees - TurnAmount)));
+                    Motor1.setTargetPosition((int) (3 * (Degrees - TurnAmount)));
+                    Motor3.setTargetPosition((int) (3 * (Degrees - TurnAmount)));
+                    Motor2.setTargetPosition((int) (-3 * (Degrees - TurnAmount)));
+                    Motor4.setTargetPosition((int) (-3 * (Degrees - TurnAmount)));
 
-                    left_motor.setPower(1);
-                    right_motor.setPower(-1);
+                    Motor1.setPower(1);
+                    Motor2.setPower(-1);
+                    Motor3.setPower(1);
+                    Motor4.setPower(-1);
                 }
             }
 
         }
 
-        private void UpdatePhoneCamera (Mat Frame, JavaCameraView PhoneView){
-            Frame = Imgcodecs.imread(PhoneView);
+        private void UpdatePhoneCamera (Mat Frame){
+
     }
 
 }

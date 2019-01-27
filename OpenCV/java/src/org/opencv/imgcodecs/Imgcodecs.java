@@ -7,6 +7,7 @@ import java.lang.String;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.opencv.android.JavaCameraView;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
 import org.opencv.core.MatOfInt;
@@ -107,6 +108,13 @@ public class Imgcodecs {
     }
 
     //javadoc: imread(filename)
+    public static Mat imread(JavaCameraView filename)
+    {
+
+        Mat retVal = new Mat(imread_1(filename));
+
+        return retVal;
+    }
 
 
     //
@@ -216,7 +224,7 @@ public class Imgcodecs {
 
     // C++:  Mat cv::imread(String filename, int flags = IMREAD_COLOR)
     private static native long imread_0(String filename, int flags);
-    private static native long imread_1(String filename);
+    private static native long imread_1(JavaCameraView filename);
 
     // C++:  bool cv::haveImageReader(String filename)
     private static native boolean haveImageReader_0(String filename);
