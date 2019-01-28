@@ -157,6 +157,10 @@ public class AutonomousMechanumDogecvVeraMASHUP extends LinearOpMode
         while (opModeIsActive()){
             telemetry.addData("IsAligned" , detector.getAligned()); // Is the bot aligned with the gold mineral?
             telemetry.addData("X Pos" , detector.getXPosition()); // Gold X position.
+            if (detector.getAligned())
+            {
+                break;
+            }
         }
 
         detector.disable();
