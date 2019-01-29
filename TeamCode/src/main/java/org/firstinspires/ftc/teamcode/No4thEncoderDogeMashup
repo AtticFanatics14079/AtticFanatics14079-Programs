@@ -148,10 +148,15 @@ public class No4thEncoderDogeMashup extends LinearOpMode
 
         // Loop and update the dashboard
         //land:
+        //unwind
         //go backwards
+        MoveEncoderTicks(-10);
         //sideways towards samples
+        SidewaysMovement(10);
         //forward
+        MoveEncoderTicks(10);
         //adjust towards samples sideways
+        SidewaysMovement(5);
 
 
         while (opModeIsActive()){
@@ -161,7 +166,9 @@ public class No4thEncoderDogeMashup extends LinearOpMode
             {
                 //hit middle:
                 //move sideways hit block
+                SidewaysMovement(80);
                 //move back to starting position
+                SidewaysMovement(-80);
 
                 break;
             }
@@ -170,9 +177,13 @@ public class No4thEncoderDogeMashup extends LinearOpMode
             if ((detector.getXPosition()<65)&&(detector.getXPosition()>0)){
                 //hit left:
                 //turn face left
+                TurnUsingIMU(15);
                 //go hit block
+                MoveEncoderTicks(70);
                 //go back to starting position
+                MoveEncoderTicks(-70);
                 //turn back
+                TurnUsingIMU(-15);
 
                 break;
             }
@@ -180,9 +191,13 @@ public class No4thEncoderDogeMashup extends LinearOpMode
             if (detector.getXPosition()>650){
                 //hit right:
                 //turn butt to right
+                TurnUsingIMU(-30);
                 //go hit block
+                MoveEncoderTicks(-70);
                 //go back to starting position
+                MoveEncoderTicks(70);
                 //turn back
+                TurnUsingIMU(30);
 
                 break;
             }
@@ -193,7 +208,7 @@ public class No4thEncoderDogeMashup extends LinearOpMode
         //go forward to the wall
         MoveEncoderTicks(3);
         //turn towards depot
-        TurnUsingIMU(3);
+        TurnUsingIMU(-3);
         //go to depot
         MoveEncoderTicks(3);
         //drop flag
