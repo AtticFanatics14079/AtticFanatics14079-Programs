@@ -54,7 +54,7 @@ import java.util.Locale;
  *
  * @see <a href="http://www.adafruit.com/products/2472">Adafruit IMU</a>
  */
-@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name = "AutonomousMechanumDogeMASHUP", group = "Sensor")
+@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name = "DogeMashupXcord", group = "Sensor")
 //@Disabled
 public class DogeMashupXCord extends LinearOpMode
 {
@@ -63,8 +63,8 @@ public class DogeMashupXCord extends LinearOpMode
     private DcMotor Motor2 = null;
     private DcMotor Motor3 = null;
     private DcMotor Motor4 = null;
-    private DcMotor lifter_lander = null;
-    private DcMotor ingester = null;
+  //  private DcMotor lifter_lander = null;
+   // private DcMotor ingester = null;
     private BNO055IMU imu;
     private GoldAlignDetector detector;
 
@@ -105,15 +105,15 @@ public class DogeMashupXCord extends LinearOpMode
 
         Motor2.setDirection(DcMotor.Direction.REVERSE);
         Motor4.setDirection(DcMotor.Direction.REVERSE);
-        lifter_lander.setDirection(DcMotor.Direction.FORWARD);
-        ingester.setDirection(DcMotor.Direction.FORWARD);
+       // lifter_lander.setDirection(DcMotor.Direction.FORWARD);
+        //ingester.setDirection(DcMotor.Direction.FORWARD);
 
         Motor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         Motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         Motor3.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         Motor4.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        lifter_lander.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        ingester.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+       // lifter_lander.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        //ingester.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 
         // Set up our telemetry dashboard
@@ -147,34 +147,51 @@ public class DogeMashupXCord extends LinearOpMode
         imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
 
         // Loop and update the dashboard
+        //land
+        
+
 
         //turn to middle
-        TurnUsingIMU(-97);
 
         while (opModeIsActive()){
             telemetry.addData("IsAligned" , detector.getAligned()); // Is the bot aligned with the gold mineral?
             telemetry.addData("X Pos" , detector.getXPosition()); // Gold X position.
-
             if (detector.getAligned())
             {
                 //hit middle
+
+
                 break;
             }
 
             //turn to second posiition
-            if (detector.getXPosition()<7){
-                //left
-                TurnUsingIMU(-97);
+            if ((detector.getXPosition()<65)&&(detector.getXPosition()>0)){
+                //hit left
+
                 break;
             }
 
-            if (detector.getXPosition()>7){
+            if (detector.getXPosition()>650){
                 //hit right
+
                 break;
             }
-        }
 
+        }
+        //turn a bit
+        TurnUsingIMU(3);
+        //go forward to the wall
+        MoveEncoderTicks(3);
+        //turn towards depot
+        TurnUsingIMU(3);
+        //go to depot
+        MoveEncoderTicks(3);
+        //drop flag
+        //back up to crater
+        MoveEncoderTicks(-3);
         detector.disable();
+
+
     }
 
     //----------------------------------------------------------------------------------------------
