@@ -147,32 +147,42 @@ public class No4thEncoderDogeMashup extends LinearOpMode
         imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
 
         // Loop and update the dashboard
-        //land
+        //land:
+        //go backwards
+        //sideways towards samples
+        //forward
+        //adjust towards samples sideways
 
-
-
-        //turn to middle
 
         while (opModeIsActive()){
             telemetry.addData("IsAligned" , detector.getAligned()); // Is the bot aligned with the gold mineral?
             telemetry.addData("X Pos" , detector.getXPosition()); // Gold X position.
             if (detector.getAligned())
             {
-                //hit middle
-
+                //hit middle:
+                //move sideways hit block
+                //move back to starting position
 
                 break;
             }
 
             //turn to second posiition
             if ((detector.getXPosition()<65)&&(detector.getXPosition()>0)){
-                //hit left
+                //hit left:
+                //turn face left
+                //go hit block
+                //go back to starting position
+                //turn back
 
                 break;
             }
 
             if (detector.getXPosition()>650){
-                //hit right
+                //hit right:
+                //turn butt to right
+                //go hit block
+                //go back to starting position
+                //turn back
 
                 break;
             }
