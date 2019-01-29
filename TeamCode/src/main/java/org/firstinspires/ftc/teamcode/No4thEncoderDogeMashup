@@ -54,17 +54,17 @@ import java.util.Locale;
  *
  * @see <a href="http://www.adafruit.com/products/2472">Adafruit IMU</a>
  */
-@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name = "DogeMashupXcord", group = "Sensor")
+@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name = "No4thEncoderDogeMashup", group = "Sensor")
 //@Disabled
-public class DogeMashupXCord extends LinearOpMode
+public class No4thEncoderDogeMashup extends LinearOpMode
 {
 
     private DcMotor Motor1 = null;
     private DcMotor Motor2 = null;
     private DcMotor Motor3 = null;
     private DcMotor Motor4 = null;
-  //  private DcMotor lifter_lander = null;
-   // private DcMotor ingester = null;
+    //  private DcMotor lifter_lander = null;
+    // private DcMotor ingester = null;
     private BNO055IMU imu;
     private GoldAlignDetector detector;
 
@@ -105,14 +105,14 @@ public class DogeMashupXCord extends LinearOpMode
 
         Motor2.setDirection(DcMotor.Direction.REVERSE);
         Motor4.setDirection(DcMotor.Direction.REVERSE);
-       // lifter_lander.setDirection(DcMotor.Direction.FORWARD);
+        // lifter_lander.setDirection(DcMotor.Direction.FORWARD);
         //ingester.setDirection(DcMotor.Direction.FORWARD);
 
         Motor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         Motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         Motor3.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         Motor4.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-       // lifter_lander.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        // lifter_lander.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         //ingester.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 
@@ -148,7 +148,7 @@ public class DogeMashupXCord extends LinearOpMode
 
         // Loop and update the dashboard
         //land
-        
+
 
 
         //turn to middle
