@@ -150,72 +150,81 @@ public class AutonomousMechanumDogeCV extends LinearOpMode
         //land:
         //unwind
         //go backwards
-        MoveEncoderTicks(-5);
+        MoveEncoderTicks(3.5);
         //sideways towards samples
-        SidewaysMovement(5);
+        SidewaysMovement(-5);
         //forward
-        MoveEncoderTicks(5);
+        MoveEncoderTicks(-3.5);
+        SidewaysMovement(-35);
+        MoveEncoderTicks(40);
 
+        int counter = 0;
 
         while (opModeIsActive()){
-            telemetry.addData("IsAligned" , detector.getAligned()); // Is the bot aligned with the gold mineral?
-            telemetry.addData("X Pos" , detector.getXPosition()); // Gold X position.
-            if (detector.getAligned())
+            for (int Counter = 0; Counter < 5; Counter++)
             {
-                //hit middle:
-                //move sideways hit block
-                SidewaysMovement(51);
-                //move back to starting position
-                SidewaysMovement(-26);
-                //come out to common position
-                MoveEncoderTicks(40);
+                telemetry.addData("IsAligned" , detector.getAligned()); // Is the bot aligned with the gold mineral?
+                telemetry.addData("X Pos" , detector.getXPosition()); // Gold X position.
+                if (detector.getAligned())
+                {
+                    //hit middle:
+                    //move sideways hit block
+                    SidewaysMovement(-51);
+                    //move back to starting position
+                    SidewaysMovement(26);
+                    //come out to common position
+                    MoveEncoderTicks(-40);
 
-                break;
+                    break;
+                }
+
+                //turn to second posiition
+                if ((detector.getXPosition()<65)&&(detector.getXPosition()>0)){
+                    //hit left:
+                    //clear post
+                    SidewaysMovement(-35);
+                    //forward align
+                    MoveEncoderTicks(-40);
+                    //hit block
+                    SidewaysMovement(-36);
+                    //go back to starting position
+                    SidewaysMovement(36);
+
+                    break;
+                }
+
+                if (detector.getXPosition()>650){
+                    //hit right:
+                    //clear post
+                    SidewaysMovement(-35);
+                    //forward align
+                    MoveEncoderTicks(40);
+                    //hit block
+                    SidewaysMovement(-36);
+                    //go back to starting position
+                    SidewaysMovement(36);
+                    //get to commmon
+                    MoveEncoderTicks(-80);
+
+
+                    break;
+                }
             }
 
-            //turn to second posiition
-            if ((detector.getXPosition()<65)&&(detector.getXPosition()>0)){
-                //hit left:
-                //clear post
-                SidewaysMovement(25);
-                //forward align
-                MoveEncoderTicks(40);
-                //hit block
-                SidewaysMovement(36);
-                //go back to starting position
-                SidewaysMovement(-36);
-
-                break;
-            }
-
-            if (detector.getXPosition()>650){
-                //hit right:
-                //clear post
-                SidewaysMovement(25);
-                //forward align
-                MoveEncoderTicks(-40);
-                //hit block
-                SidewaysMovement(36);
-                //go back to starting position
-                SidewaysMovement(-36);
-                //get to commmon
-                MoveEncoderTicks(80);
-
-
-                break;
-            }
+            counter = counter + 1;
+            MoveEncoderTicks(40);
 
         }
 
         //go to wall
-        MoveEncoderTicks(102);
+        MoveEncoderTicks(-102);
         //turn a bit
-        TurnUsingIMU(-32);
+        TurnUsingIMU(-45);
         //go forward to depot
-        MoveEncoderTicks(105);
+        MoveEncoderTicks(-105);
         //drop flag
         //back up to crater/
-        MoveEncoderTicks(-220);
+        MoveEncoderTicks(220);
         detector.disable();
 
 
@@ -308,7 +317,7 @@ public class AutonomousMechanumDogeCV extends LinearOpMode
 
     }
 
-    private void MoveEncoderTicks(int NumbCM)
+    private void MoveEncoderTicks(double NumbCM)
     {
 
         ResetMotorEncoders();
