@@ -29,6 +29,7 @@ package org.firstinspires.ftc.teamcode;/* Copyright (c) 2017 FIRST. All rights r
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -52,7 +53,7 @@ import java.util.Locale;
  * @see <a href="http://www.adafruit.com/products/2472">Adafruit IMU</a>
  */
 @com.qualcomm.robotcore.eventloop.opmode.Autonomous(name = "Autonomous", group = "Sensor")
-//@Disabled
+@Disabled
 public class AutonomousOpenCVTest extends LinearOpMode
     {
 

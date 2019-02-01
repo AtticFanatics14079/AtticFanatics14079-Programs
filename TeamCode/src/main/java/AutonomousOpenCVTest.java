@@ -27,23 +27,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.opencv.android.BaseLoaderCallback;
-import org.opencv.android.CameraBridgeViewBase.CvCameraViewFrame;
-import org.opencv.android.JavaCameraView;
-import org.opencv.android.LoaderCallbackInterface;
-import org.opencv.android.OpenCVLoader;
-import org.opencv.core.Core;
-import org.opencv.core.CvType;
-import org.opencv.core.Mat;
-import org.opencv.core.MatOfPoint;
-import org.opencv.core.Rect;
-import org.opencv.core.Scalar;
-import org.opencv.core.Size;
-import org.opencv.android.CameraBridgeViewBase;
-import org.opencv.android.CameraBridgeViewBase.CvCameraViewListener2;
-import org.opencv.imgcodecs.Imgcodecs;
-import org.opencv.imgproc.Imgproc;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
@@ -56,6 +39,7 @@ import android.view.SurfaceView;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -79,7 +63,9 @@ import java.util.Locale;
  * @see <a href="http://www.adafruit.com/products/2472">Adafruit IMU</a>
  */
 @com.qualcomm.robotcore.eventloop.opmode.Autonomous(name = "AutonomousOpenCV", group = "Sensor")
-//@Disabled
+
+@Disabled
+
 public class AutonomousOpenCVTest extends LinearOpMode
     {
 
@@ -88,10 +74,6 @@ public class AutonomousOpenCVTest extends LinearOpMode
         private DcMotor lifter_lander;
         private DcMotor ingester;
         BNO055IMU imu;
-
-        private JavaCameraView PhoneCamera;
-
-        private Mat Height, Length; //EYY ITS AN OPENCV VARIABLE TYPE!!! MEANS PICTURE.
 
     // State used for updating telemetry
     Orientation angles;
@@ -114,8 +96,6 @@ public class AutonomousOpenCVTest extends LinearOpMode
         parameters.loggingTag          = "IMU";
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
-        System. loadLibrary ("OpenCV");
-
         // Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port
         // on a Core Device Interface Module, configured to be a sensor of type "AdaFruit IMU",
         // and named "imu".
@@ -135,10 +115,6 @@ public class AutonomousOpenCVTest extends LinearOpMode
         right_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lifter_lander.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         ingester.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        PhoneCamera = hardwareMap.get(JavaCameraView.class, "PhoneCamera");
-        PhoneCamera.setVisibility(SurfaceView.VISIBLE);
-        PhoneCamera.setCvCameraViewListener((CameraBridgeViewBase.CvCameraViewListener) this);
 
         // Set up our telemetry dashboard
         composeTelemetry();
@@ -356,10 +332,6 @@ public class AutonomousOpenCVTest extends LinearOpMode
             }
 
         }
-
-        private void UpdatePhoneCamera (Mat Frame, JavaCameraView PhoneView){
-            Frame = Imgcodecs.imread(PhoneView);
-    }
 
 }
 

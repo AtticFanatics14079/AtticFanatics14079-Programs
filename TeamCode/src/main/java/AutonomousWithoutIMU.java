@@ -51,7 +51,9 @@ import com.qualcomm.robotcore.util.Range;
  */
 
 @Autonomous(name="AutonomousWithoutIMU", group="Linear Opmode")
-//@Disabled
+
+@Disabled
+
 public class AutonomousWithoutIMU extends LinearOpMode {
 
     // Declare OpMode members.

@@ -43,8 +43,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
-import org.opencv.android.CameraBridgeViewBase;
-import org.opencv.core.Mat;
 
 import java.util.Locale;
 
@@ -57,7 +55,9 @@ import java.util.Locale;
  * @see <a href="http://www.adafruit.com/products/2472">Adafruit IMU</a>
  */
 @com.qualcomm.robotcore.eventloop.opmode.Autonomous(name = "AutonomousTreads", group = "Sensor")
-//@Disabled
+
+@Disabled
+
 public class Autonomous extends LinearOpMode
     {
 
