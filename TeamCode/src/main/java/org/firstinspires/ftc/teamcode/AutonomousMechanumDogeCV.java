@@ -155,13 +155,15 @@ public class AutonomousMechanumDogeCV extends LinearOpMode
         SidewaysMovement(-5);
         //forward
         MoveEncoderTicks(-3.5);
-        SidewaysMovement(-35);
+        SidewaysMovement(-25);
         MoveEncoderTicks(40);
 
-        int counter = 0;
+        int counter = 2;
+
+        boolean BreakLoop;
 
         while (opModeIsActive()){
-            for (int Counter = 0; Counter < 5; Counter++)
+            for (int Counter = 0; Counter < 2; Counter++)
             {
                 telemetry.addData("IsAligned" , detector.getAligned()); // Is the bot aligned with the gold mineral?
                 telemetry.addData("X Pos" , detector.getXPosition()); // Gold X position.
@@ -173,50 +175,27 @@ public class AutonomousMechanumDogeCV extends LinearOpMode
                     //move back to starting position
                     SidewaysMovement(26);
                     //come out to common position
-                    MoveEncoderTicks(-40);
+
+                    MoveEncoderTicks(counter * -40);
+
+                    BreakLoop = true;
 
                     break;
                 }
 
-                //turn to second posiition
-                if ((detector.getXPosition()<65)&&(detector.getXPosition()>0)){
-                    //hit left:
-                    //clear post
-                    SidewaysMovement(-35);
-                    //forward align
-                    MoveEncoderTicks(-40);
-                    //hit block
-                    SidewaysMovement(-36);
-                    //go back to starting position
-                    SidewaysMovement(36);
 
-                    break;
-                }
-
-                if (detector.getXPosition()>650){
-                    //hit right:
-                    //clear post
-                    SidewaysMovement(-35);
-                    //forward align
-                    MoveEncoderTicks(40);
-                    //hit block
-                    SidewaysMovement(-36);
-                    //go back to starting position
-                    SidewaysMovement(36);
-                    //get to commmon
-                    MoveEncoderTicks(-80);
-
-
-                    break;
-                }
             }
 
-            counter = counter + 1;
-            MoveEncoderTicks(40);
+            if (BreakLoop = true )
+                break;
+
+            counter = counter - 1;
+            MoveEncoderTicks(-40);
 
         }
 
         //go to wall
+        TurnUsingIMU(-45);
         MoveEncoderTicks(-102);
         //turn a bit
         TurnUsingIMU(-45);
@@ -315,6 +294,8 @@ public class AutonomousMechanumDogeCV extends LinearOpMode
         Motor3.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         Motor4.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        composeTelemetry();
+
     }
 
     private void MoveEncoderTicks(double NumbCM)
@@ -331,7 +312,7 @@ public class AutonomousMechanumDogeCV extends LinearOpMode
         Motor3.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Motor4.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        double Ticks = 50.1275 * NumbCM;
+        double Ticks = 48.1275 * NumbCM;
 
         Motor1.setTargetPosition((int) Ticks);
         Motor2.setTargetPosition((int) Ticks);
@@ -355,30 +336,30 @@ public class AutonomousMechanumDogeCV extends LinearOpMode
             telemetry.update();
             TurnAmount = angles.firstAngle;
             if (TurnAmount > .3 && Motor1.getPower() > 0) {
-                Motor2.setPower(.9);
-                Motor4.setPower(.9);
-                Motor1.setPower(1);
-                Motor3.setPower(1);
+                Motor2.setPower(1);
+                Motor4.setPower(1);
+                Motor1.setPower(.9);
+                Motor3.setPower(.9);
             }
             else if (TurnAmount > .3 && Motor1.getPower() < 0) {
-                Motor2.setPower(-.9);
-                Motor4.setPower(-.9);
-                Motor1.setPower(-1);
-                Motor3.setPower(-1);
+                Motor2.setPower(-1);
+                Motor4.setPower(-1);
+                Motor1.setPower(-.9);
+                Motor3.setPower(-.9);
             }
             else if (TurnAmount < -.3 && Motor1.getPower() > 0)
             {
-                Motor1.setPower(.9);
-                Motor3.setPower(.9);
-                Motor2.setPower(1);
-                Motor4.setPower(1);
+                Motor1.setPower(1);
+                Motor3.setPower(1);
+                Motor2.setPower(.9);
+                Motor4.setPower(.9);
             }
             else if (TurnAmount < -.3 && Motor1.getPower() < 0)
             {
-                Motor1.setPower(-.9);
-                Motor3.setPower(-.9);
-                Motor2.setPower(-1);
-                Motor4.setPower(-1);
+                Motor1.setPower(-1);
+                Motor3.setPower(-1);
+                Motor2.setPower(-.9);
+                Motor4.setPower(-.9);
             }
             else if (Motor1.getPower() > 0){
                 Motor1.setPower(1);
@@ -387,10 +368,10 @@ public class AutonomousMechanumDogeCV extends LinearOpMode
                 Motor4.setPower(1);
             }
             else {
-                Motor1.setPower(1);
-                Motor2.setPower(1);
-                Motor3.setPower(1);
-                Motor4.setPower(1);
+                Motor1.setPower(-1);
+                Motor2.setPower(-1);
+                Motor3.setPower(-1);
+                Motor4.setPower(-1);
             }
         }
 
@@ -526,7 +507,7 @@ public class AutonomousMechanumDogeCV extends LinearOpMode
         Motor3.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Motor4.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        double Ticks = 50.1275 * NumbCM;
+        double Ticks = 48.1275 * NumbCM;
 
         Motor1.setTargetPosition((int) Ticks);
         Motor2.setTargetPosition((int) Ticks);
@@ -550,30 +531,30 @@ public class AutonomousMechanumDogeCV extends LinearOpMode
             telemetry.update();
             TurnAmount = angles.firstAngle;
             if (TurnAmount > .3 && Motor2.getPower() > 0) {
-                Motor3.setPower(-.9);
-                Motor1.setPower(.9);
-                Motor4.setPower(-1);
-                Motor2.setPower(1);
+                Motor3.setPower(-1);
+                Motor1.setPower(1);
+                Motor4.setPower(-.9);
+                Motor2.setPower(.9);
             }
             else if (TurnAmount > .3 && Motor2.getPower() < 0) {
-                Motor3.setPower(.9);
-                Motor1.setPower(-.9);
-                Motor4.setPower(1);
-                Motor2.setPower(-1);
+                Motor3.setPower(1);
+                Motor1.setPower(-1);
+                Motor4.setPower(.9);
+                Motor2.setPower(-.9);
             }
             else if (TurnAmount < -.3 && Motor2.getPower() > 0)
             {
-                Motor4.setPower(-.9);
-                Motor2.setPower(.9);
-                Motor3.setPower(-1);
-                Motor1.setPower(1);
+                Motor4.setPower(-1);
+                Motor2.setPower(1);
+                Motor3.setPower(-.9);
+                Motor1.setPower(.9);
             }
             else if (TurnAmount < -.3 && Motor2.getPower() < 0)
             {
-                Motor4.setPower(.9);
-                Motor2.setPower(-.9);
-                Motor3.setPower(1);
-                Motor1.setPower(-1);
+                Motor4.setPower(1);
+                Motor2.setPower(-1);
+                Motor3.setPower(.9);
+                Motor1.setPower(-.9);
             }
             else if (Motor2.getPower() > 0)
             {
