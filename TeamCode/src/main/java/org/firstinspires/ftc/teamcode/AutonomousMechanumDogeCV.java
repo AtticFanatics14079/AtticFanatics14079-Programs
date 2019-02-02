@@ -160,7 +160,7 @@ public class AutonomousMechanumDogeCV extends LinearOpMode
 
         int counter = 2;
 
-        boolean BreakLoop;
+        boolean BreakLoop = false;
 
         while (opModeIsActive()){
             for (int Counter = 0; Counter < 2; Counter++)
@@ -171,39 +171,39 @@ public class AutonomousMechanumDogeCV extends LinearOpMode
                 {
                     //hit middle:
                     //move sideways hit block
-                    SidewaysMovement(-51);
+                    SidewaysMovement(-40); // This is for no depot; actual value is -26.
                     //move back to starting position
-                    SidewaysMovement(26);
+                    //SidewaysMovement(26);
                     //come out to common position
 
-                    MoveEncoderTicks(counter * -40);
+                    //MoveEncoderTicks(counter * -40);
 
                     BreakLoop = true;
-
                     break;
                 }
 
 
             }
 
-            if (BreakLoop = true )
+            if (BreakLoop) {
                 break;
+            }
 
-            counter = counter - 1;
+            //counter = counter - 1;
             MoveEncoderTicks(-40);
 
         }
 
         //go to wall
-        TurnUsingIMU(-45);
-        MoveEncoderTicks(-102);
+        //TurnUsingIMU(-45);
+        //MoveEncoderTicks(-102);
         //turn a bit
-        TurnUsingIMU(-45);
+        //TurnUsingIMU(-45);
         //go forward to depot
-        MoveEncoderTicks(-105);
+        //MoveEncoderTicks(-105);
         //drop flag
         //back up to crater/
-        MoveEncoderTicks(220);
+        //MoveEncoderTicks(220);
         detector.disable();
 
 
@@ -515,59 +515,59 @@ public class AutonomousMechanumDogeCV extends LinearOpMode
         Motor3.setTargetPosition((int) (-1 * Ticks));
 
         if (Motor2.getTargetPosition() > 0) {
-            Motor1.setPower(1);
-            Motor2.setPower(1);
-            Motor3.setPower(-1);
-            Motor4.setPower(-1);
+            Motor1.setPower(.7);
+            Motor2.setPower(.7);
+            Motor3.setPower(-.7);
+            Motor4.setPower(-.7);
         }
         else {
-            Motor1.setPower(-1);
-            Motor2.setPower(-1);
-            Motor3.setPower(1);
-            Motor4.setPower(1);
+            Motor1.setPower(-.7);
+            Motor2.setPower(-.7);
+            Motor3.setPower(.7);
+            Motor4.setPower(.7);
         }
 
         while (Motor1.isBusy() || Motor2.isBusy() || Motor3.isBusy() || Motor4.isBusy()) {
             telemetry.update();
             TurnAmount = angles.firstAngle;
             if (TurnAmount > .3 && Motor2.getPower() > 0) {
-                Motor3.setPower(-1);
-                Motor1.setPower(1);
-                Motor4.setPower(-.9);
-                Motor2.setPower(.9);
+                Motor3.setPower(-.7);
+                Motor1.setPower(.7);
+                Motor4.setPower(-.5);
+                Motor2.setPower(.5);
             }
             else if (TurnAmount > .3 && Motor2.getPower() < 0) {
-                Motor3.setPower(1);
-                Motor1.setPower(-1);
-                Motor4.setPower(.9);
-                Motor2.setPower(-.9);
+                Motor3.setPower(.7);
+                Motor1.setPower(-.7);
+                Motor4.setPower(.5);
+                Motor2.setPower(-.5);
             }
             else if (TurnAmount < -.3 && Motor2.getPower() > 0)
             {
-                Motor4.setPower(-1);
-                Motor2.setPower(1);
-                Motor3.setPower(-.9);
-                Motor1.setPower(.9);
+                Motor4.setPower(-.7);
+                Motor2.setPower(.7);
+                Motor3.setPower(-.5);
+                Motor1.setPower(.5);
             }
             else if (TurnAmount < -.3 && Motor2.getPower() < 0)
             {
-                Motor4.setPower(1);
-                Motor2.setPower(-1);
-                Motor3.setPower(.9);
-                Motor1.setPower(-.9);
+                Motor4.setPower(.7);
+                Motor2.setPower(-.7);
+                Motor3.setPower(.5);
+                Motor1.setPower(-.5);
             }
             else if (Motor2.getPower() > 0)
             {
-                Motor1.setPower(1);
-                Motor2.setPower(1);
-                Motor3.setPower(-1);
-                Motor4.setPower(-1);
+                Motor1.setPower(.7);
+                Motor2.setPower(.7);
+                Motor3.setPower(-.7);
+                Motor4.setPower(-.7);
             }
             else {
-                Motor1.setPower(-1);
-                Motor2.setPower(-1);
-                Motor3.setPower(1);
-                Motor4.setPower(1);
+                Motor1.setPower(-.7);
+                Motor2.setPower(-.7);
+                Motor3.setPower(.7);
+                Motor4.setPower(.7);
             }
         }
 
