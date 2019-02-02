@@ -114,7 +114,9 @@ public class AutonomousMechanumDogeCV extends LinearOpMode
         Motor4.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lifter_lander.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         //ingester.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
+        
+        lifter_lander.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        lifter_lander.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         // Set up our telemetry dashboard
         composeTelemetry();
@@ -148,6 +150,8 @@ public class AutonomousMechanumDogeCV extends LinearOpMode
 
         // Loop and update the dashboard
         //land:
+        lifter_lander.setTargetPosition(1560);
+        lifter_lander.setPower(.5);
         //unwind
         //go backwards
         MoveEncoderTicks(3.5);
@@ -155,41 +159,38 @@ public class AutonomousMechanumDogeCV extends LinearOpMode
         SidewaysMovement(-5);
         //forward
         MoveEncoderTicks(-3.5);
-        SidewaysMovement(-25);
-        MoveEncoderTicks(40);
-
+        SidewaysMovement(-35);
+        MoveEncoderTicks(35);
+        
         int counter = 2;
-
+        
         boolean BreakLoop = false;
 
         while (opModeIsActive()){
-            for (int Counter = 0; Counter < 2; Counter++)
-            {
                 telemetry.addData("IsAligned" , detector.getAligned()); // Is the bot aligned with the gold mineral?
                 telemetry.addData("X Pos" , detector.getXPosition()); // Gold X position.
                 if (detector.getAligned())
                 {
                     //hit middle:
                     //move sideways hit block
-                    SidewaysMovement(-40); // This is for no depot; actual value is -26.
+                    SidewaysMovement(-51);
                     //move back to starting position
-                    //SidewaysMovement(26);
+                    SidewaysMovement(26);
                     //come out to common position
 
-                    //MoveEncoderTicks(counter * -40);
+                    MoveEncoderTicks(counter * -40);
 
                     BreakLoop = true;
+
                     break;
                 }
+                
 
-
-            }
-
-            if (BreakLoop) {
+            if (BreakLoop == true ) {
                 break;
             }
 
-            //counter = counter - 1;
+            counter = counter - 1;
             MoveEncoderTicks(-40);
 
         }
