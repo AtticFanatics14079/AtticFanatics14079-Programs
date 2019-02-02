@@ -62,7 +62,7 @@ public class AutonomousMechanumDepotSideDogeCV extends LinearOpMode {
     private DcMotor Motor2 = null;
     private DcMotor Motor3 = null;
     private DcMotor Motor4 = null;
-    //  private DcMotor lifter_lander = null;
+    private DcMotor lifter_lander = null;
     // private DcMotor ingester = null;
     private BNO055IMU imu;
     private GoldAlignDetector detector;
@@ -98,21 +98,21 @@ public class AutonomousMechanumDepotSideDogeCV extends LinearOpMode {
         Motor2 = hardwareMap.get(DcMotor.class, "motor_2");
         Motor3 = hardwareMap.get(DcMotor.class, "motor_3");
         Motor4 = hardwareMap.get(DcMotor.class, "motor_4");
-        //lifter_lander = hardwareMap.get(DcMotor.class, "lifter");
+        lifter_lander = hardwareMap.get(DcMotor.class, "lifter");
         //ingester = hardwareMap.get(DcMotor.class, "ingester");
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
 
         Motor2.setDirection(DcMotor.Direction.REVERSE);
         Motor4.setDirection(DcMotor.Direction.REVERSE);
-        // lifter_lander.setDirection(DcMotor.Direction.FORWARD);
+        lifter_lander.setDirection(DcMotor.Direction.FORWARD);
         //ingester.setDirection(DcMotor.Direction.FORWARD);
 
         Motor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         Motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         Motor3.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         Motor4.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        // lifter_lander.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        lifter_lander.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         //ingester.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 
@@ -147,6 +147,15 @@ public class AutonomousMechanumDepotSideDogeCV extends LinearOpMode {
         imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
 
         //unwind
+        lifter_lander.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lifter_lander.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        lifter_lander.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        lifter_lander.setTargetPosition(1560);
+        lifter_lander.setPower(.5);
+        while(lifter_lander.isBusy()){
+            lifter_lander.setPower(.5);
+        }
+        lifter_lander.setPower(0);
         //go backwards
         MoveEncoderTicks(3.5);
         //sideways towards samples
