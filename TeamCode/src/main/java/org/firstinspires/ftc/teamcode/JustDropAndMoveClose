@@ -54,7 +54,7 @@ import java.util.Locale;
  *
  * @see <a href="http://www.adafruit.com/products/2472">Adafruit IMU</a>
  */
-@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name = "AutonomousMechanumDogeCVDepotSide", group = "Sensor")
+@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name = "JustDropAndMoveClose", group = "Sensor")
 //@Disabled
 public class JustDropAndMoveClose extends LinearOpMode {
 
@@ -147,7 +147,10 @@ public class JustDropAndMoveClose extends LinearOpMode {
         imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
 
         //unwind
+        lifter_lander.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lifter_lander.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         lifter_lander.setTargetPosition(1560);
+        lifter_lander.setPower(.5);
         while(lifter_lander.isBusy()){
             lifter_lander.setPower(.5);
         }
