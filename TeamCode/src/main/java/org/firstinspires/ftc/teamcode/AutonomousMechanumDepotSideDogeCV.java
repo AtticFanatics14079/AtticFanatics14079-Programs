@@ -162,13 +162,13 @@ public class AutonomousMechanumDepotSideDogeCV extends LinearOpMode {
                 telemetry.addLine("middle");
                 //hit middle:
                 //move sideways hit block
-                SidewaysMovement(-157);
-                TurnUsingIMU(-45);
+                SidewaysMovement(157);
+                TurnUsingIMU(45);
                 break;
             }
 
             //turn to second position
-            if ((detector.getXPosition() < 65) && (detector.getXPosition() > 0)) {
+            if ((detector.getXPosition() < 80) && (detector.getXPosition() > 0)) {
                 telemetry.addLine("left");
                 //hit left:
                 //clear post
@@ -178,14 +178,14 @@ public class AutonomousMechanumDepotSideDogeCV extends LinearOpMode {
                 //hit block
                 SidewaysMovement(-77);
                 TurnUsingIMU(-45);
-                SidewaysMovement(-65);
+                MoveEncoderTicks(-65);
                 //claim
 
 
                 break;
             }
 
-            if (detector.getXPosition() > 650) {
+            if (detector.getXPosition() > 500) {
                telemetry.addLine("right");
                 //hit right:
                 //clear post
@@ -195,8 +195,8 @@ public class AutonomousMechanumDepotSideDogeCV extends LinearOpMode {
                 //hit block
                 SidewaysMovement(-90);
                 //face depot wall
-                TurnUsingIMU(-45);
-                SidewaysMovement(-60);
+                TurnUsingIMU(45);
+               MoveEncoderTicks(60);
 
                 break;
             }
@@ -207,7 +207,7 @@ public class AutonomousMechanumDepotSideDogeCV extends LinearOpMode {
         }
 
         //claim
-        SidewaysMovement(-205);
+
         detector.disable();
     }
 
@@ -320,7 +320,7 @@ public class AutonomousMechanumDepotSideDogeCV extends LinearOpMode {
         Motor3.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Motor4.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        double Ticks = 50.1275 * NumbCM;
+        double Ticks = 45.1275 * NumbCM;
 
         Motor1.setTargetPosition((int) Ticks);
         Motor2.setTargetPosition((int) Ticks);
