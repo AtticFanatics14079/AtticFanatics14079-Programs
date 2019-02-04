@@ -191,7 +191,7 @@ public class JustDropAndMoveClose extends LinearOpMode {
 
         //claim
 
-        detector.disable();
+        //detector.disable();
     }
 
     //----------------------------------------------------------------------------------------------
