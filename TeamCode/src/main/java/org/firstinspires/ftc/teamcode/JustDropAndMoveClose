@@ -154,7 +154,7 @@ public class JustDropAndMoveClose extends LinearOpMode {
         //lifter_lander.setPower(.5);
         //while(lifter_lander.isBusy()){
             lifter_lander.setPower(.5);
-        }
+       // }
         //lifter_lander.setPower(0);
         //go backwards
         MoveEncoderTicks(3.5);
