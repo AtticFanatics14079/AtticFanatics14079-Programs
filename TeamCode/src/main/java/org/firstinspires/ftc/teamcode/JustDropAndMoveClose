@@ -147,15 +147,15 @@ public class JustDropAndMoveClose extends LinearOpMode {
         imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
 
         //unwind
-        lifter_lander.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        lifter_lander.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        lifter_lander.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        lifter_lander.setTargetPosition(1560);
-        lifter_lander.setPower(.5);
-        while(lifter_lander.isBusy()){
+       //lifter_lander.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //lifter_lander.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //lifter_lander.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        //lifter_lander.setTargetPosition(1560);
+        //lifter_lander.setPower(.5);
+        //while(lifter_lander.isBusy()){
             lifter_lander.setPower(.5);
         }
-        lifter_lander.setPower(0);
+        //lifter_lander.setPower(0);
         //go backwards
         MoveEncoderTicks(3.5);
         //sideways towards samples
@@ -172,13 +172,13 @@ public class JustDropAndMoveClose extends LinearOpMode {
             }
 
             //turn to second position
-            if ((detector.getXPosition() < 65) && (detector.getXPosition() > 0)) {
+            if ((detector.getXPosition() < 80) && (detector.getXPosition() > 0)) {
               telemetry.addLine("gold left");
 
 
             }
 
-            if (detector.getXPosition() > 650) {
+            if (detector.getXPosition() > 500) {
                telemetry.addLine("gold right");
 
 
