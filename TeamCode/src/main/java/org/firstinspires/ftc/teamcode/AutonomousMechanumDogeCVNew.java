@@ -315,7 +315,7 @@ public class AutonomousMechanumDogeCVNew extends LinearOpMode
         Motor3.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         Motor4.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
-    
+
     private void MoveEncoderTicks(double NumbCM) {
 
         ResetMotorEncoders();
