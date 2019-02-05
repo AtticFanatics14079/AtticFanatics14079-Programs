@@ -54,7 +54,7 @@ import java.util.Locale;
  *
  * @see <a href="http://www.adafruit.com/products/2472">Adafruit IMU</a>
  */
-@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name = "AutonomousMechanumDogeCVDepotSide", group = "Sensor")
+@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name = "JustDropAndMoveClose", group = "Sensor")
 //@Disabled
 public class JustDropAndMoveClose extends LinearOpMode {
 
@@ -62,7 +62,7 @@ public class JustDropAndMoveClose extends LinearOpMode {
     private DcMotor Motor2 = null;
     private DcMotor Motor3 = null;
     private DcMotor Motor4 = null;
-    private DcMotor lifter_lander = null;
+   //private DcMotor lifter_lander = null;
     // private DcMotor ingester = null;
     private BNO055IMU imu;
     private GoldAlignDetector detector;
@@ -98,21 +98,21 @@ public class JustDropAndMoveClose extends LinearOpMode {
         Motor2 = hardwareMap.get(DcMotor.class, "motor_2");
         Motor3 = hardwareMap.get(DcMotor.class, "motor_3");
         Motor4 = hardwareMap.get(DcMotor.class, "motor_4");
-        lifter_lander = hardwareMap.get(DcMotor.class, "lifter");
+       // lifter_lander = hardwareMap.get(DcMotor.class, "lifter");
         //ingester = hardwareMap.get(DcMotor.class, "ingester");
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
 
         Motor2.setDirection(DcMotor.Direction.REVERSE);
         Motor4.setDirection(DcMotor.Direction.REVERSE);
-         lifter_lander.setDirection(DcMotor.Direction.FORWARD);
+       //lifter_lander.setDirection(DcMotor.Direction.FORWARD);
         //ingester.setDirection(DcMotor.Direction.FORWARD);
 
         Motor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         Motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         Motor3.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         Motor4.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-         lifter_lander.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+       // lifter_lander.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         //ingester.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 
@@ -146,13 +146,19 @@ public class JustDropAndMoveClose extends LinearOpMode {
         // Start the logging of measured acceleration
         imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
 
-        //unwind
-        lifter_lander.setTargetPosition(1560);
-        while(lifter_lander.isBusy()){
-            lifter_lander.setPower(.5);
-        }
-        lifter_lander.setPower(0);
-        //go backwards
+     //unwind
+    //lifter_lander.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    //lifter_lander.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    //lifter_lander.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    // lifter_lander.setTargetPosition(1560);
+    // lifter_lander.setPower(.5);
+    //while(lifter_lander.isBusy()){
+    //     lifter_lander.setPower(.5);
+//}
+    //lifter_lander.setPower(0);
+    //go backwards
+
+
         MoveEncoderTicks(3.5);
         //sideways towards samples
         SidewaysMovement(-5);
@@ -164,18 +170,23 @@ public class JustDropAndMoveClose extends LinearOpMode {
             telemetry.addData("IsAligned", detector.getAligned()); // Is the bot aligned with the gold mineral?
             telemetry.addData("X Pos", detector.getXPosition()); // Gold X position.
             if (detector.getAligned()) {
-               telemetry.addLine("gold middle");
+                telemetry.addLine("middle");
+                SidewaysMovement(3);
+
             }
 
             //turn to second position
-            if ((detector.getXPosition() < 65) && (detector.getXPosition() > 0)) {
-              telemetry.addLine("gold left");
+            if ((detector.getXPosition() < 80) && (detector.getXPosition() > 0)) {
+                telemetry.addLine("left");
+                telemetry.addLine("left");
+                MoveEncoderTicks(3);
 
 
             }
 
-            if (detector.getXPosition() > 650) {
-               telemetry.addLine("gold right");
+            if (detector.getXPosition() > 500) {
+                telemetry.addLine("right");
+                MoveEncoderTicks(-3);
 
 
             }
@@ -299,7 +310,7 @@ public class JustDropAndMoveClose extends LinearOpMode {
         Motor3.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Motor4.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        double Ticks = 50.1275 * NumbCM;
+        double Ticks = 45.1275 * NumbCM;
 
         Motor1.setTargetPosition((int) Ticks);
         Motor2.setTargetPosition((int) Ticks);
