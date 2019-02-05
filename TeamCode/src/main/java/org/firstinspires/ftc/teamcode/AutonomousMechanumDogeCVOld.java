@@ -58,7 +58,7 @@ import java.util.Locale;
  */
 @com.qualcomm.robotcore.eventloop.opmode.Autonomous(name = "AutonomousMechanumDogeCVCraterSideOLDVERSION2/2/19", group = "Sensor")
 @Disabled
-public class AutonomousMechanumDogeCV extends LinearOpMode {
+public class AutonomousMechanumDogeCVOld extends LinearOpMode {
         private DcMotor Motor1 = null;
         private DcMotor Motor2 = null;
         private DcMotor Motor3 = null;
