@@ -55,9 +55,9 @@ import java.util.Locale;
  *
  * @see <a href="http://www.adafruit.com/products/2472">Adafruit IMU</a>
  */
-@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name = "AutonomousMechanumDogeCVDepotSideJon", group = "Sensor")
+@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name = "AutonomousMechanumDogeCVCraterSide", group = "Sensor")
 //@Disabled
-public class AutonomousMechanumDepotSideDogeCV extends LinearOpMode
+public class AutonomousMechanumDogeCVNew extends LinearOpMode
 {
 
     private DcMotor Motor1 = null;
@@ -166,14 +166,14 @@ public class AutonomousMechanumDepotSideDogeCV extends LinearOpMode
         lifter_lander.setPower(0);
         //unwind
         //go backwards
-        HeadingAdjust = MoveEncoderTicks(3.5, HeadingAdjust);
+        MoveEncoderTicks(3.5);
         //sideways towards samples
-        HeadingAdjust = SidewaysMovement(-5, HeadingAdjust);
+        SidewaysMovement(-5);
         //forward
-        HeadingAdjust = MoveEncoderTicks(-3.5, HeadingAdjust);
-        HeadingAdjust = SidewaysMovement(-35, HeadingAdjust);
-        HeadingAdjust = MoveEncoderTicks(37, HeadingAdjust);
-
+        MoveEncoderTicks(-3.5);
+        SidewaysMovement(-35);
+        MoveEncoderTicks(32);
+        
         int counter = 2;
 
         boolean BreakLoop = false;
@@ -186,12 +186,12 @@ public class AutonomousMechanumDepotSideDogeCV extends LinearOpMode
                 if (detector.getAligned()) {
                     //hit middle:
                     //move sideways hit block
-                    HeadingAdjust = SidewaysMovement(-40, HeadingAdjust);
+                    SidewaysMovement(-80); //Actual value is -26
                     //move back to starting position
                     //HeadingAdjust = SidewaysMovement(26, HeadingAdjust);
                     //come out to common position
                     //HeadingAdjust = MoveEncoderTicks(counter * -40, HeadingAdjust);
-
+                    Claim.setPosition(.7);
                     BreakLoop = true;
 
                     break;
@@ -199,43 +199,24 @@ public class AutonomousMechanumDepotSideDogeCV extends LinearOpMode
 
             }
 
-            if (BreakLoop) {
-                break;
-            }
+                if (BreakLoop) {
+                    break;
+                }
 
-            if (counter == 0)
-            {
-                counter = 3;
-                HeadingAdjust = MoveEncoderTicks(74, HeadingAdjust);
-            }
-            else {
-                HeadingAdjust = MoveEncoderTicks(-37, 0);
-            }
+                if (counter == 0)
+                {
+                    counter = 3;
+                    MoveEncoderTicks(80);
+                }
+                else {
+                    MoveEncoderTicks(-37);
+                }
 
             counter = counter - 1;
 
         }
 
-        switch (counter) {
-            case 0: {
-                HeadingAdjust = TurnUsingIMU(45, HeadingAdjust);
-                HeadingAdjust = SidewaysMovement(-70, HeadingAdjust);
-                Claim.setPosition(.7);
-                break;
-            }
-            case 1: {
-                HeadingAdjust = SidewaysMovement(-60, HeadingAdjust);
-                Claim.setPosition(.7);
-                break;
-            }
-            case 2: {
-                HeadingAdjust = TurnUsingIMU(-45, HeadingAdjust);
-                HeadingAdjust = SidewaysMovement(-70, HeadingAdjust);
-                Claim.setPosition(.7);
-                break;
-            }
 
-        }
         //go to wall
         //TurnUsingIMU(-45);
         //MoveEncoderTicks(-102);
@@ -246,6 +227,7 @@ public class AutonomousMechanumDepotSideDogeCV extends LinearOpMode
         //drop flag
         //back up to crater/
         //MoveEncoderTicks(220);
+
         detector.disable();
     }
     //----------------------------------------------------------------------------------------------
@@ -334,12 +316,14 @@ public class AutonomousMechanumDepotSideDogeCV extends LinearOpMode
         Motor4.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    private double MoveEncoderTicks(double NumbCM, double HeadingAdjust)
+    private void MoveEncoderTicks(double NumbCM)
     {
 
         ResetMotorEncoders();
 
         angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
+        double HeadingAdjust = angles.firstAngle;
 
         double TurnAmount;
 
@@ -415,17 +399,16 @@ public class AutonomousMechanumDepotSideDogeCV extends LinearOpMode
         Motor2.setPower(0);
         Motor3.setPower(0);
         Motor4.setPower(0);
-
-        HeadingAdjust = angles.firstAngle;
-        return HeadingAdjust;
     }
 
-    private double TurnUsingIMU(int Degrees, double HeadingAdjust)
+    private void TurnUsingIMU(int Degrees) //DO NOT TURN CLOSE TO A 180; INSTEAD JUST TURN UP TO 90 AND GO SIDEWAYS OR BACKWARDS
     {
 
         ResetMotorEncoders();
 
         angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
+        double HeadingAdjust = angles.firstAngle;
 
         double Ticks = Degrees * 19.096; //Numbers off, fix using math
 
@@ -529,16 +512,15 @@ public class AutonomousMechanumDepotSideDogeCV extends LinearOpMode
                 Motor4.setPower(-1);
             }
         }
-
-        HeadingAdjust = angles.firstAngle;
-        return HeadingAdjust;
     }
 
-    private double SidewaysMovement (double NumbCM, double HeaderAdjust){
+    private void SidewaysMovement (double NumbCM){
 
         ResetMotorEncoders();
 
         angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
+        double HeadingAdjust = angles.firstAngle;
 
         double TurnAmount;
 
@@ -554,57 +536,55 @@ public class AutonomousMechanumDepotSideDogeCV extends LinearOpMode
         Motor2.setTargetPosition((int) (-1 * Ticks));
         Motor3.setTargetPosition((int) (-1 * Ticks));
 
-        if (Motor2.getTargetPosition() > 0) {
+        if (Motor2.getTargetPosition() < 0) {
             Motor1.setPower(.5);
-            Motor4.setPower(.5);
-            Motor3.setPower(-.5);
             Motor2.setPower(-.5);
+            Motor3.setPower(-.5);
+            Motor4.setPower(.5);
         }
         else {
             Motor1.setPower(-.5);
-            Motor4.setPower(-.5);
             Motor2.setPower(.5);
             Motor3.setPower(.5);
+            Motor4.setPower(-.5);
         }
 
         while (Motor1.isBusy() || Motor2.isBusy() || Motor3.isBusy() || Motor4.isBusy()) {
-            //telemetry.update();
-            //TurnAmount = angles.firstAngle - HeaderAdjust;
-            //if (TurnAmount > .3 && Motor2.getPower() > 0) {
-            // Motor3.setPower(.7);
-            // Motor1.setPower(-.5);
-            // Motor4.setPower(-.5);
-            // Motor2.setPower(.7);
-            // }
-            // else if (TurnAmount > .3 && Motor2.getPower() < 0) {
-            //    Motor3.setPower(-.7);
-            //      Motor1.setPower(.5);
-            //      Motor4.setPower(.5);
-            //      Motor2.setPower(-.7);
-            //  }
-            //  else if (TurnAmount < -.3 && Motor2.getPower() > 0)
-            // {
-            //    Motor4.setPower(-.7);
-            //    Motor2.setPower(.5);
-            //    Motor3.setPower(.5);
-            //    Motor1.setPower(-.7);
-            // }
-            //else if (TurnAmount < -.3 && Motor2.getPower() < 0)
-            //{
-            //    Motor4.setPower(.7);
-            //    Motor2.setPower(-.5);
-            //   Motor3.setPower(-.5);
-            //    Motor1.setPower(.5);
-            // }
-            //else
-            if (Motor2.getPower() > 0)
+            telemetry.update();
+            TurnAmount = angles.firstAngle - HeadingAdjust;
+            if (TurnAmount > .3 && Motor2.getPower() > 0) {
+                Motor3.setPower(.5);
+                Motor1.setPower(-.55);
+                Motor4.setPower(-.45);
+                Motor2.setPower(.5);
+            }
+            else if (TurnAmount > .3 && Motor2.getPower() < 0) {
+                Motor3.setPower(-.5);
+                Motor1.setPower(.45);
+                Motor4.setPower(.55);
+                Motor2.setPower(-.5);
+            }
+            else if (TurnAmount < -.3 && Motor2.getPower() > 0) {
+                Motor4.setPower(-.55);
+                Motor2.setPower(.5);
+                Motor3.setPower(.5);
+                Motor1.setPower(-.45);
+            }
+            else if (TurnAmount < -.3 && Motor2.getPower() < 0)
+            {
+                Motor4.setPower(.55);
+                Motor2.setPower(-.5);
+                Motor3.setPower(-.5);
+                Motor1.setPower(.45);
+            }
+           else if (Motor2.getPower() > 0)
             {
                 Motor1.setPower(-.5);
                 Motor2.setPower(.5);
                 Motor3.setPower(.5);
                 Motor4.setPower(-.5);
             }
-            else {
+          else {
                 Motor1.setPower(.5);
                 Motor2.setPower(-.5);
                 Motor3.setPower(-.5);
@@ -616,9 +596,6 @@ public class AutonomousMechanumDepotSideDogeCV extends LinearOpMode
         Motor2.setPower(0);
         Motor3.setPower(0);
         Motor4.setPower(0);
-
-        HeaderAdjust = angles.firstAngle;
-        return HeaderAdjust;
     }
 
 }

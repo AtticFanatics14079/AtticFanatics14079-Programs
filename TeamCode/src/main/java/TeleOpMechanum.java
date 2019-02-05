@@ -88,18 +88,24 @@ public class TeleOpMechanum extends OpMode
 
         if (gamepad1.left_bumper) {
             if (gamepad1.right_stick_x != 0) {
-                Motor1.setPower(-.5 * (gamepad1.right_stick_x));
-                Motor2.setPower(-.5 * (gamepad1.right_stick_x));
-                Motor3.setPower(.5 * (gamepad1.right_stick_x));
-                Motor4.setPower(.5 * (gamepad1.right_stick_x));
+                Motor1.setPower(-.3 * (gamepad1.right_stick_x));
+                Motor4.setPower(-.3 * (gamepad1.right_stick_x));
+                Motor3.setPower(.3 * (gamepad1.right_stick_x));
+                Motor2.setPower(.3 * (gamepad1.right_stick_x));
             }
             else {
-                Motor1.setPower(.5 * (gamepad1.left_stick_y));
-                Motor2.setPower(.5 * (gamepad1.left_stick_y));
-                Motor3.setPower(.5 * (gamepad1.left_stick_y));
-                Motor4.setPower(.5 * (gamepad1.left_stick_y));
+                Motor1.setPower(.3 * (gamepad1.left_stick_y));
+                Motor2.setPower(.3 * (gamepad1.left_stick_y));
+                Motor3.setPower(.3 * (gamepad1.left_stick_y));
+                Motor4.setPower(.3 * (gamepad1.left_stick_y));
             }
 
+        }
+        else if (gamepad1.right_bumper){
+            Motor1.setPower(-1 * (gamepad1.right_stick_x));
+            Motor4.setPower(-1 * (gamepad1.right_stick_x));
+            Motor3.setPower(1 * (gamepad1.right_stick_x));
+            Motor2.setPower(1 * (gamepad1.right_stick_x));
         }
         else {
             Motor1.setPower(gamepad1.left_stick_y + gamepad1.right_stick_x);
