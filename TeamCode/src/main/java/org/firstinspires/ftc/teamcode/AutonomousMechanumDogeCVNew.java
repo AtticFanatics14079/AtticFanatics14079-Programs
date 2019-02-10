@@ -101,7 +101,7 @@ public class AutonomousMechanumDogeCVNew extends LinearOpMode
         Motor2 = hardwareMap.get(DcMotor.class, "motor_2");
         Motor3 = hardwareMap.get(DcMotor.class, "motor_3");
         Motor4 = hardwareMap.get(DcMotor.class, "motor_4");
-        //lifter_lander = hardwareMap.get(DcMotor.class, "lifter");
+        lifter_lander = hardwareMap.get(DcMotor.class, "lifter");
         //ingester = hardwareMap.get(DcMotor.class, "ingester");
         //Claim = hardwareMap.get(Servo.class, "Claim");
         imu = hardwareMap.get(BNO055IMU.class, "imu");
@@ -116,12 +116,8 @@ public class AutonomousMechanumDogeCVNew extends LinearOpMode
         Motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         Motor3.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         Motor4.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        //lifter_lander.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        lifter_lander.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         //ingester.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        //lifter_lander.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //lifter_lander.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        //lifter_lander.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         // Set up our telemetry dashboard
         composeTelemetry();
@@ -155,15 +151,15 @@ public class AutonomousMechanumDogeCVNew extends LinearOpMode
 
         // Loop and update the dashboard
         //land:
-        //lifter_lander.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //lifter_lander.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        //lifter_lander.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-       // lifter_lander.setTargetPosition(22000);
-        //lifter_lander.setPower(1);
-        //while(lifter_lander.isBusy()){
-        //   lifter_lander.setPower(1);
-        //}
-        //lifter_lander.setPower(0);
+        lifter_lander.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lifter_lander.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        lifter_lander.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        lifter_lander.setTargetPosition(15120);
+        lifter_lander.setPower(1);
+        while(lifter_lander.isBusy()){
+           lifter_lander.setPower(1);
+        }
+        lifter_lander.setPower(0);
         //unwind
         //go backwards
         MoveEncoderTicks(3);
@@ -222,6 +218,11 @@ public class AutonomousMechanumDogeCVNew extends LinearOpMode
             }
 
         }
+        MoveEncoderTicks(-75); //Don't know actual number here
+        TurnUsingIMU(45);
+        MoveEncoderTicks(-120); //Don't know actual number here
+        //Claim.setPosition(.7); //This hasn't worked before but it should
+        MoveEncoderTicks(178);
         detector.disable();
     }
     //----------------------------------------------------------------------------------------------
