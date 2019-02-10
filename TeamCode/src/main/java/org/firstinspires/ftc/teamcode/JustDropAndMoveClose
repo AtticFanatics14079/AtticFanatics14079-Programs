@@ -150,7 +150,7 @@ public class JustDropAndMoveClose extends LinearOpMode {
     //lifter_lander.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     //lifter_lander.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     //lifter_lander.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-    // lifter_lander.setTargetPosition(1560);
+    // lifter_lander.setTargetPosition(15120);
     // lifter_lander.setPower(.5);
     //while(lifter_lander.isBusy()){
     //     lifter_lander.setPower(.5);
