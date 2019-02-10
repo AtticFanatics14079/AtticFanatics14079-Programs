@@ -56,7 +56,7 @@ import java.util.Locale;
  * @see <a href="http://www.adafruit.com/products/2472">Adafruit IMU</a>
  */
 
-@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name = "AutonomousMechanumDogeCVCraterSide", group = "Sensor")
+@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name = "AutonomousMechanumDogeCVCraterSideKoolVersion", group = "Sensor")
 //@Disabled
 public class AutonomousMechanumDogeCVNew extends LinearOpMode
 {
