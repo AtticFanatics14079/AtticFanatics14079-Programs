@@ -1,4 +1,4 @@
-/* Copyright (c) 2017 FIRST. All rights reserved.
+package AtticFanaticsRoverRuckusPrograms;/* Copyright (c) 2017 FIRST. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted (subject to the limitations in the disclaimer below) provided that
@@ -27,16 +27,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.view.View.OnTouchListener;
-import android.view.SurfaceView;
-
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -55,17 +45,15 @@ import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 import java.util.Locale;
 
 /**
- * {@link AutonomousOpenCVTest} gives a short demo on how to use the BNO055 Inertial Motion Unit (IMU) from AdaFruit.
+ * {@link Autonomous} gives a short demo on how to use the BNO055 Inertial Motion Unit (IMU) from AdaFruit.
  *
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  *
  * @see <a href="http://www.adafruit.com/products/2472">Adafruit IMU</a>
  */
-@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name = "AutonomousOpenCV", group = "Sensor")
-
+@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name = "AtticFanaticsRoverRuckusPrograms.AutonomousMechanumDogeCVNew.Autonomous", group = "Sensor")
 @Disabled
-
 public class AutonomousOpenCVTest extends LinearOpMode
     {
 
@@ -126,7 +114,7 @@ public class AutonomousOpenCVTest extends LinearOpMode
         imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
 
         // Loop and update the dashboard
-        TurnUsingIMU(-97);
+        MoveEncoderTicks(200);
     }
 
     //----------------------------------------------------------------------------------------------
@@ -204,13 +192,13 @@ public class AutonomousOpenCVTest extends LinearOpMode
         return String.format(Locale.getDefault(), "%.1f", AngleUnit.DEGREES.normalize(degrees));
     }
 
-    private void ResetMotorEncoders(){
-        left_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        right_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        left_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        right_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        private void ResetMotorEncoders(){
+            left_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            right_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            left_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            right_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-    }
+        }
 
         private void MoveEncoderTicks(int NumbCM)
         {
@@ -234,15 +222,10 @@ public class AutonomousOpenCVTest extends LinearOpMode
             while (left_motor.isBusy() || right_motor.isBusy()) {
                 telemetry.update();
                 TurnAmount = angles.firstAngle;
-                if (TurnAmount > .3) {
+                if (TurnAmount < 5)
                     right_motor.setPower(.9);
-                    left_motor.setPower(1);
-                }
-                else if (TurnAmount < -.3)
-                {
+                else if (TurnAmount > -5)
                     left_motor.setPower(.9);
-                    right_motor.setPower(1);
-                }
                 else {
                     left_motor.setPower(1);
                     right_motor.setPower(1);
@@ -256,82 +239,35 @@ public class AutonomousOpenCVTest extends LinearOpMode
 
         private void TurnUsingIMU(int Degrees)
         {
-
-            ResetMotorEncoders();
-
             angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
-            double Ticks = Degrees * 32;
+            double TurnAmount = angles.firstAngle;
 
-            left_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            right_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            boolean Left;
 
-            left_motor.setTargetPosition((int) (-1 * Ticks));
-            right_motor.setTargetPosition((int) Ticks);
+            if (Degrees < 0)
+                Left = true;
+            else Left = false;
 
-            double TurnAmount;
+            if (Left)
+            {
+                left_motor.setPower(-1);
+                right_motor.setPower(1);
+            }
+            else {
+                left_motor.setPower(-1);
+                right_motor.setPower(1);
+            }
 
-            left_motor.setPower(-1);
-            right_motor.setPower(1);
-
-            while (left_motor.isBusy() || right_motor.isBusy())
+            while (opModeIsActive())
             {
                 telemetry.update();
-            }
-
-            while (opModeIsActive()) {
-
-                telemetry.update();
-                TurnAmount = angles.firstAngle;
-                if (Degrees - TurnAmount > -2 && Degrees - TurnAmount < 2) {
-
-                    left_motor.setPower(0);
-                    right_motor.setPower(0);
+                if (TurnAmount == Degrees)
                     break;
-                }
-                else if ((Degrees - TurnAmount >= 2) && (TurnAmount >= 0)) {
-
-                    ResetMotorEncoders();
-
-                    left_motor.setTargetPosition((int) (-3 * (Degrees - TurnAmount)));
-                    right_motor.setTargetPosition((int) (3 * (Degrees - TurnAmount)));
-
-                    left_motor.setPower(-1);
-                    right_motor.setPower(1);
-                }
-                else if (Degrees - TurnAmount <= -2){
-
-                    ResetMotorEncoders();
-
-                    left_motor.setTargetPosition((int) (3 * (Degrees - TurnAmount)));
-                    right_motor.setTargetPosition((int) (-3 * (Degrees - TurnAmount)));
-
-                    left_motor.setPower(1);
-                    right_motor.setPower(-1);
-                }
-                else if (-1 * Degrees + TurnAmount <= -2){
-
-                    ResetMotorEncoders();
-
-                    left_motor.setTargetPosition((int) (-3 * (Degrees - TurnAmount)));
-                    right_motor.setTargetPosition((int) (3 * (Degrees - TurnAmount)));
-
-                    left_motor.setPower(-1);
-                    right_motor.setPower(1);
-                }
-                else {
-
-                    ResetMotorEncoders();
-
-                    left_motor.setTargetPosition((int) (3 * (Degrees - TurnAmount)));
-                    right_motor.setTargetPosition((int) (-3 * (Degrees - TurnAmount)));
-
-                    left_motor.setPower(1);
-                    right_motor.setPower(-1);
-                }
             }
 
+            left_motor.setPower(0);
+            right_motor.setPower(0);
         }
-
 }
 

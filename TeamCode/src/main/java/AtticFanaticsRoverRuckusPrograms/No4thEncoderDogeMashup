@@ -54,17 +54,17 @@ import java.util.Locale;
  *
  * @see <a href="http://www.adafruit.com/products/2472">Adafruit IMU</a>
  */
-@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name = "DogeMashupXcord", group = "Sensor")
+@com.qualcomm.robotcore.eventloop.opmode.AtticFanaticsRoverRuckusPrograms.AutonomousMechanumDogeCVNew.Autonomous(name = "No4thEncoderDogeMashup", group = "Sensor")
 //@Disabled
-public class DogeMashupXCord extends LinearOpMode
+public class No4thEncoderDogeMashup extends LinearOpMode
 {
 
     private DcMotor Motor1 = null;
     private DcMotor Motor2 = null;
     private DcMotor Motor3 = null;
     private DcMotor Motor4 = null;
-  //  private DcMotor lifter_lander = null;
-   // private DcMotor ingester = null;
+    //  private DcMotor lifter_lander = null;
+    // private DcMotor ingester = null;
     private BNO055IMU imu;
     private GoldAlignDetector detector;
 
@@ -105,14 +105,14 @@ public class DogeMashupXCord extends LinearOpMode
 
         Motor2.setDirection(DcMotor.Direction.REVERSE);
         Motor4.setDirection(DcMotor.Direction.REVERSE);
-       // lifter_lander.setDirection(DcMotor.Direction.FORWARD);
+        // lifter_lander.setDirection(DcMotor.Direction.FORWARD);
         //ingester.setDirection(DcMotor.Direction.FORWARD);
 
         Motor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         Motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         Motor3.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         Motor4.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-       // lifter_lander.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        // lifter_lander.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         //ingester.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 
@@ -147,48 +147,75 @@ public class DogeMashupXCord extends LinearOpMode
         imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
 
         // Loop and update the dashboard
-        //land
-        
+        //land:
+        //unwind
+        //go backwards
+        MoveEncoderTicks(-5);
+        //sideways towards samples
+        SidewaysMovement(5);
+        //forward
+        MoveEncoderTicks(5);
 
-
-        //turn to middle
 
         while (opModeIsActive()){
             telemetry.addData("IsAligned" , detector.getAligned()); // Is the bot aligned with the gold mineral?
             telemetry.addData("X Pos" , detector.getXPosition()); // Gold X position.
             if (detector.getAligned())
             {
-                //hit middle
-
+                //hit middle:
+                //move sideways hit block
+                SidewaysMovement(51);
+                //move back to starting position
+                SidewaysMovement(-26);
+                //come out to common position
+                MoveEncoderTicks(40);
 
                 break;
             }
 
             //turn to second posiition
             if ((detector.getXPosition()<65)&&(detector.getXPosition()>0)){
-                //hit left
+                //hit left:
+               //clear post
+                SidewaysMovement(25);
+                //forward align
+                MoveEncoderTicks(40);
+                //hit block
+                SidewaysMovement(36);
+                //go back to starting position
+                SidewaysMovement(-36);
 
                 break;
             }
 
             if (detector.getXPosition()>650){
-                //hit right
+                //hit right:
+                //clear post
+                SidewaysMovement(25);
+                //forward align
+                MoveEncoderTicks(-40);
+                //hit block
+                SidewaysMovement(36);
+                //go back to starting position
+                SidewaysMovement(-36);
+                //get to commmon
+                MoveEncoderTicks(80);
+
 
                 break;
             }
 
         }
+
+        //go to wall
+        MoveEncoderTicks(102);
         //turn a bit
-        TurnUsingIMU(3);
-        //go forward to the wall
-        MoveEncoderTicks(3);
-        //turn towards depot
-        TurnUsingIMU(3);
-        //go to depot
-        MoveEncoderTicks(3);
+        TurnUsingIMU(-32);
+        //go forward to depot
+        MoveEncoderTicks(105);
         //drop flag
-        //back up to crater
-        MoveEncoderTicks(-3);
+        //back up to crater/
+        MoveEncoderTicks(-220);
         detector.disable();
 
 
@@ -273,11 +300,9 @@ public class DogeMashupXCord extends LinearOpMode
         Motor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Motor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Motor3.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        Motor4.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Motor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         Motor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         Motor3.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        Motor4.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
     }
 
@@ -293,21 +318,19 @@ public class DogeMashupXCord extends LinearOpMode
         Motor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Motor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Motor3.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        Motor4.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         double Ticks = 50.1275 * NumbCM;
 
         Motor1.setTargetPosition((int) Ticks);
         Motor2.setTargetPosition((int) Ticks);
         Motor3.setTargetPosition((int) Ticks);
-        Motor4.setTargetPosition((int) Ticks);
 
         Motor1.setPower(1);
         Motor2.setPower(1);
         Motor3.setPower(1);
         Motor4.setPower(1);
 
-        while (Motor1.isBusy() || Motor2.isBusy() || Motor3.isBusy() || Motor4.isBusy()) {
+        while (Motor1.isBusy() || Motor2.isBusy() || Motor3.isBusy()) {
             telemetry.update();
             TurnAmount = angles.firstAngle;
             if (TurnAmount > .3 && Motor1.getPower() > 0) {
@@ -369,12 +392,10 @@ public class DogeMashupXCord extends LinearOpMode
         Motor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Motor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Motor3.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        Motor4.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         Motor1.setTargetPosition((int) (-1 * Ticks));
         Motor2.setTargetPosition((int) Ticks);
         Motor3.setTargetPosition((int) (-1 * Ticks));
-        Motor4.setTargetPosition((int) Ticks);
 
         double TurnAmount;
 
@@ -383,7 +404,7 @@ public class DogeMashupXCord extends LinearOpMode
         Motor3.setPower(-1);
         Motor4.setPower(1);
 
-        while (Motor1.isBusy() || Motor2.isBusy() || Motor3.isBusy() || Motor4.isBusy())
+        while (Motor1.isBusy() || Motor2.isBusy() || Motor3.isBusy())
         {
             telemetry.update();
         }
@@ -408,7 +429,6 @@ public class DogeMashupXCord extends LinearOpMode
                 Motor1.setTargetPosition((int) (-2 * (Degrees - TurnAmount)));
                 Motor3.setTargetPosition((int) (-2 * (Degrees - TurnAmount)));
                 Motor2.setTargetPosition((int) (2 * (Degrees - TurnAmount)));
-                Motor4.setTargetPosition((int) (2 * (Degrees - TurnAmount)));
 
                 Motor1.setPower(-1);
                 Motor2.setPower(1);
@@ -422,7 +442,6 @@ public class DogeMashupXCord extends LinearOpMode
                 Motor1.setTargetPosition((int) (2 * (Degrees - TurnAmount)));
                 Motor3.setTargetPosition((int) (2 * (Degrees - TurnAmount)));
                 Motor2.setTargetPosition((int) (-2 * (Degrees - TurnAmount)));
-                Motor4.setTargetPosition((int) (-2 * (Degrees - TurnAmount)));
 
                 Motor1.setPower(1);
                 Motor2.setPower(-1);
@@ -450,7 +469,6 @@ public class DogeMashupXCord extends LinearOpMode
                 Motor1.setTargetPosition((int) (2 * (Degrees - TurnAmount)));
                 Motor3.setTargetPosition((int) (2 * (Degrees - TurnAmount)));
                 Motor2.setTargetPosition((int) (-2 * (Degrees - TurnAmount)));
-                Motor4.setTargetPosition((int) (-2 * (Degrees - TurnAmount)));
 
                 Motor1.setPower(1);
                 Motor2.setPower(-1);
@@ -472,21 +490,19 @@ public class DogeMashupXCord extends LinearOpMode
         Motor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Motor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Motor3.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        Motor4.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         double Ticks = 50.1275 * NumbCM;
 
         Motor1.setTargetPosition((int) Ticks);
         Motor2.setTargetPosition((int) (-1 * Ticks));
         Motor3.setTargetPosition((int) (-1 * Ticks));
-        Motor4.setTargetPosition((int) Ticks);
 
         Motor1.setPower(1);
         Motor2.setPower(-1);
         Motor3.setPower(-1);
         Motor4.setPower(1);
 
-        while (Motor1.isBusy() || Motor2.isBusy() || Motor3.isBusy() || Motor4.isBusy()) {
+        while (Motor1.isBusy() || Motor2.isBusy() || Motor3.isBusy()) {
             telemetry.update();
             TurnAmount = angles.firstAngle;
             if (TurnAmount > .3 && Motor2.getPower() < 0) {

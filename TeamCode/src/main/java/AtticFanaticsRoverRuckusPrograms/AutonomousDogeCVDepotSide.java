@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;/* Copyright (c) 2017 FIRST. All rights reserved.
+package AtticFanaticsRoverRuckusPrograms;/* Copyright (c) 2017 FIRST. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted (subject to the limitations in the disclaimer below) provided that
@@ -32,6 +32,7 @@ import com.disnodeteam.dogecv.DogeCV;
 import com.disnodeteam.dogecv.detectors.roverrukus.GoldAlignDetector;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -56,9 +57,9 @@ import java.util.Locale;
  * @see <a href="http://www.adafruit.com/products/2472">Adafruit IMU</a>
  */
 //
-@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name = "AutonomousMechanumDogeCVCraterSideRotated", group = "Sensor")
-//@Disabled
-public class AutonomousMechanumDogeCVNewRotated extends LinearOpMode
+@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name = "AutonomousMechanumDogeCVDepotSide", group = "Sensor")
+@Disabled
+public class AutonomousDogeCVDepotSide extends LinearOpMode
 {
 
     private DcMotor Motor1 = null;
@@ -109,7 +110,7 @@ public class AutonomousMechanumDogeCVNewRotated extends LinearOpMode
 
         Motor2.setDirection(DcMotor.Direction.REVERSE);
         Motor4.setDirection(DcMotor.Direction.REVERSE);
-        lifter_lander.setDirection(DcMotor.Direction.FORWARD);
+        lifter_lander.setDirection(DcMotor.Direction.REVERSE);
         //ingester.setDirection(DcMotor.Direction.FORWARD);
 
         Motor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -144,7 +145,7 @@ public class AutonomousMechanumDogeCVNewRotated extends LinearOpMode
         detector.enable(); // Start the detector!
 
         while (! isStarted()) {
-            Claim.setPosition(.1);
+            Claim.setPosition(.4);
             telemetry.update();
         }
 
@@ -159,17 +160,17 @@ public class AutonomousMechanumDogeCVNewRotated extends LinearOpMode
         lifter_lander.setTargetPosition(15120);
         lifter_lander.setPower(1);
         while(lifter_lander.isBusy()){
-           lifter_lander.setPower(1);
+            lifter_lander.setPower(1);
             telemetry.update();
         }
         lifter_lander.setPower(0);
         //unwind
         //go backwards
-        SidewaysMovement(-4);
+        MoveEncoderTicks(4);
         //sideways towards samples
-        MoveEncoderTicks(-5);
+        SidewaysMovement(-5);
         //forward
-        SidewaysMovement(4);
+        MoveEncoderTicks(-4);
 
         while (opModeIsActive()) {
 
@@ -179,34 +180,37 @@ public class AutonomousMechanumDogeCVNewRotated extends LinearOpMode
 
             if (detector.getXPosition() > 400) {
 
-                detector.disable();
-                MoveEncoderTicks(-27);
-                SidewaysMovement(-30);
-                MoveEncoderTicks(-28);
-                MoveEncoderTicks(28);
-                SidewaysMovement(135);
+                SidewaysMovement(-27);
+                MoveEncoderTicks(30);
+                SidewaysMovement(-60);
+                TurnUsingIMU(-135);
+                SidewaysMovement(42);
+                Claim.setPosition(.9);
+                MoveEncoderTicks(200);
 
                 break;
             }
-                //turn to second posiition
+            //turn to second position
             else if ((detector.getXPosition() < 115) && (detector.getXPosition() > 0)) {
 
-                detector.disable();
-                MoveEncoderTicks(-27);
-                SidewaysMovement(40);
-                MoveEncoderTicks(-28);
-                MoveEncoderTicks(28);
-                SidewaysMovement(65);
+                SidewaysMovement(-27);
+                MoveEncoderTicks(-40);
+                SidewaysMovement(-68);
+                TurnUsingIMU(-135);
+                MoveEncoderTicks(-50);
+                Claim.setPosition(.9);
+                MoveEncoderTicks(210);
 
                 break;
             }
 
             else if (detector.getAligned()) {
 
-                detector.disable();
-                MoveEncoderTicks(-55);
-                MoveEncoderTicks(28);
-                SidewaysMovement(105);
+                SidewaysMovement(-120);
+                TurnUsingIMU(-135);
+                SidewaysMovement(5);
+                Claim.setPosition(.9);
+                MoveEncoderTicks(205);
 
                 break;
             }
@@ -214,11 +218,7 @@ public class AutonomousMechanumDogeCVNewRotated extends LinearOpMode
 
         }
 
-        TurnUsingIMU(-43);
-        MoveEncoderTicks(135); //Don't know actual number here
-        Claim.setPosition(.9); //This hasn't worked before but it should
-        MoveEncoderTicks(-175);
-
+        detector.disable();
     }
     //----------------------------------------------------------------------------------------------
     // Telemetry Configuration
