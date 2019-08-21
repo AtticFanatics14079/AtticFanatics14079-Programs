@@ -1,14 +1,11 @@
-package AtticFanaticsPrograms;
+package AtticFanaticsMiscellaneousPrograms;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.hardware.CRServo;
 
 import org.firstinspires.ftc.robotcore.external.Func;
 import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
@@ -20,21 +17,20 @@ import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="SwerveDriveFirstTryCRServo", group="Iterative Opmode")
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="SwerveDriveFirstTry1260DegreesServo", group="Iterative Opmode")
 //@Disabled
-public class SwerveDriveFirstTryCRServo extends OpMode
+public class SwerveDriveFirstTry1260DegreesServo extends OpMode
 {
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor Motor1;
     private DcMotor Motor2;
     private DcMotor Motor3;
     private DcMotor Motor4;
-    private CRServo Servo1;
-    private CRServo Servo2;
-    private CRServo Servo3;
-    private CRServo Servo4;
+    private Servo Servo1;
+    private Servo Servo2;
+    private Servo Servo3;
+    private Servo Servo4;
     private double HeadingAdjust;
     private boolean OutOfPosition;
 
@@ -61,10 +57,10 @@ public class SwerveDriveFirstTryCRServo extends OpMode
         Motor2 = hardwareMap.get(DcMotor.class, "motor_2");
         Motor3 = hardwareMap.get(DcMotor.class, "motor_3");
         Motor4 = hardwareMap.get(DcMotor.class, "motor_4");
-        Servo1 = hardwareMap.get(CRServo.class, "servo_1");
-        Servo2 = hardwareMap.get(CRServo.class, "servo_2");
-        Servo3 = hardwareMap.get(CRServo.class, "servo_3");
-        Servo4 = hardwareMap.get(CRServo.class, "servo_4");
+        Servo1 = hardwareMap.get(Servo.class, "servo_1");
+        Servo2 = hardwareMap.get(Servo.class, "servo_2");
+        Servo3 = hardwareMap.get(Servo.class, "servo_3");
+        Servo4 = hardwareMap.get(Servo.class, "servo_4");
 
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
@@ -105,69 +101,81 @@ public class SwerveDriveFirstTryCRServo extends OpMode
         {
             if (!OutOfPosition)
             {
-                Servo1.setPower(-1); //Also some way to adjust with feedback from servo, should stop at 90 degrees
-                Servo4.setPower(-1); //Also some way to adjust with feedback from servo, should stop at 90 degrees
+                Servo1.setPosition(Servo1.getPosition() + 0.07); //Replace position modifier with whatever is 90 degrees
+                Servo4.setPosition(Servo1.getPosition() + 0.07); //Replace position modifier with whatever is 90 degrees
                 OutOfPosition = true;
             }
 
             if (angles.firstAngle - HeadingAdjust <= 90 && angles.firstAngle - HeadingAdjust >= 0)
             {
-                Servo1.setPower(-1); //Also some way to adjust with feedback from servo, should stop at 90 degrees
+                Servo1.setPosition(Servo1.getPosition() + 0.07); //Replace position modifier with whatever is 90 degrees
                 Motor1.setPower(1);
-                Servo2.setPower(-1); //Also some way to adjust with feedback from servo, should stop at 90 degrees
+                Servo2.setPosition(Servo1.getPosition() + 0.07); //Replace position modifier with whatever is 90 degrees
                 Motor2.setPower(-gamepad1.left_stick_y);
-                Servo4.setPower(-1); //Same deal as before
+                Servo4.setPosition(Servo1.getPosition() + 0.07); //Replace position modifier with whatever is 90 degrees
                 Motor4.setPower(1);
-                Servo3.setPower(-1); //Also some way to adjust with feedback from servo, should stop at 90 degrees
+                Servo3.setPosition(Servo1.getPosition() + 0.07); //Replace position modifier with whatever is 90 degrees
                 Motor3.setPower(gamepad1.left_stick_y);
                 while (angles.firstAngle - HeadingAdjust <= 90 && angles.firstAngle - HeadingAdjust >= 0)
                 {
-                    //Keep servos in position
+                    Servo1.setPosition(Servo1.getPosition() - 0.0007777 * (angles.firstAngle - HeadingAdjust));
+                    Servo2.setPosition(Servo1.getPosition() - 0.0007777 * (angles.firstAngle - HeadingAdjust));
+                    Servo3.setPosition(Servo1.getPosition() - 0.0007777 * (angles.firstAngle - HeadingAdjust));
+                    Servo4.setPosition(Servo1.getPosition() - 0.0007777 * (angles.firstAngle - HeadingAdjust));
                 }
             }
             else if (angles.firstAngle - HeadingAdjust <= 180 && angles.firstAngle - HeadingAdjust >= 90)
             {
-                Servo2.setPower(-1); //Also some way to adjust with feedback from servo, should stop at 90 degrees
+                Servo2.setPosition(Servo1.getPosition() + 0.07); //Replace position modifier with whatever is 90 degrees
                 Motor2.setPower(1);
-                Servo1.setPower(-1); //Also some way to adjust with feedback from servo, should stop at 90 degrees
+                Servo1.setPosition(Servo1.getPosition() + 0.07); //Replace position modifier with whatever is 90 degrees
                 Motor1.setPower(-gamepad1.left_stick_y);
-                Servo3.setPower(-1); //Same deal as before
+                Servo3.setPosition(Servo1.getPosition() + 0.07); //Replace position modifier with whatever is 90 degrees
                 Motor3.setPower(1);
-                Servo4.setPower(-1); //Also some way to adjust with feedback from servo, should stop at 90 degrees
+                Servo4.setPosition(Servo1.getPosition() + 0.07); //Replace position modifier with whatever is 90 degrees
                 Motor4.setPower(gamepad1.left_stick_y);
                 while (angles.firstAngle - HeadingAdjust <= 180 && angles.firstAngle - HeadingAdjust >= 90)
                 {
-                    //Keep servos in position
+                    Servo1.setPosition(Servo1.getPosition() - 0.0007777 * (angles.firstAngle - HeadingAdjust));
+                    Servo2.setPosition(Servo1.getPosition() - 0.0007777 * (angles.firstAngle - HeadingAdjust));
+                    Servo3.setPosition(Servo1.getPosition() - 0.0007777 * (angles.firstAngle - HeadingAdjust));
+                    Servo4.setPosition(Servo1.getPosition() - 0.0007777 * (angles.firstAngle - HeadingAdjust));
                 }
             }
             else if (angles.firstAngle - HeadingAdjust <= -90 && angles.firstAngle - HeadingAdjust >= -180)
             {
-                Servo1.setPower(-1); //Also some way to adjust with feedback from servo, should stop at 90 degrees
+                Servo1.setPosition(Servo1.getPosition() + 0.07); //Replace position modifier with whatever is 90 degrees
                 Motor1.setPower(1);
-                Servo2.setPower(-1); //Also some way to adjust with feedback from servo, should stop at 90 degrees
+                Servo2.setPosition(Servo1.getPosition() + 0.07); //Replace position modifier with whatever is 90 degrees
                 Motor2.setPower(gamepad1.left_stick_y);
-                Servo4.setPower(-1); //Same deal as before
+                Servo4.setPosition(Servo1.getPosition() + 0.07); //Replace position modifier with whatever is 90 degrees
                 Motor4.setPower(1);
-                Servo3.setPower(-1); //Also some way to adjust with feedback from servo, should stop at 90 degrees
+                Servo3.setPosition(Servo1.getPosition() + 0.07); //Replace position modifier with whatever is 90 degrees
                 Motor3.setPower(-gamepad1.left_stick_y);
                 while (angles.firstAngle - HeadingAdjust <= -90 && angles.firstAngle - HeadingAdjust >= -180)
                 {
-                    //Keep servos in position
+                    Servo1.setPosition(Servo1.getPosition() - 0.0007777 * (angles.firstAngle - HeadingAdjust));
+                    Servo2.setPosition(Servo1.getPosition() - 0.0007777 * (angles.firstAngle - HeadingAdjust));
+                    Servo3.setPosition(Servo1.getPosition() - 0.0007777 * (angles.firstAngle - HeadingAdjust));
+                    Servo4.setPosition(Servo1.getPosition() - 0.0007777 * (angles.firstAngle - HeadingAdjust));
                 }
             }
             else if (angles.firstAngle - HeadingAdjust <= 0 && angles.firstAngle - HeadingAdjust >= -90)
             {
-                Servo2.setPower(-1); //Also some way to adjust with feedback from servo, should stop at 90 degrees
+                Servo2.setPosition(Servo1.getPosition() + 0.07); //Replace position modifier with whatever is 90 degrees
                 Motor2.setPower(1);
-                Servo1.setPower(-1); //Also some way to adjust with feedback from servo, should stop at 90 degrees
+                Servo1.setPosition(Servo1.getPosition() + 0.07); //Replace position modifier with whatever is 90 degrees
                 Motor1.setPower(gamepad1.left_stick_y);
-                Servo3.setPower(-1); //Same deal as before
+                Servo3.setPosition(Servo1.getPosition() + 0.07); //Replace position modifier with whatever is 90 degrees
                 Motor3.setPower(1);
-                Servo4.setPower(-1); //Also some way to adjust with feedback from servo, should stop at 90 degrees
+                Servo4.setPosition(Servo1.getPosition() + 0.07); //Replace position modifier with whatever is 90 degrees
                 Motor4.setPower(-gamepad1.left_stick_y);
                 while (angles.firstAngle - HeadingAdjust <= 0 && angles.firstAngle - HeadingAdjust >= -90)
                 {
-                    //Keep servos in position
+                    Servo1.setPosition(Servo1.getPosition() - 0.0007777 * (angles.firstAngle - HeadingAdjust));
+                    Servo2.setPosition(Servo1.getPosition() - 0.0007777 * (angles.firstAngle - HeadingAdjust));
+                    Servo3.setPosition(Servo1.getPosition() - 0.0007777 * (angles.firstAngle - HeadingAdjust));
+                    Servo4.setPosition(Servo1.getPosition() - 0.0007777 * (angles.firstAngle - HeadingAdjust));
                 }
             }
         }
@@ -176,69 +184,81 @@ public class SwerveDriveFirstTryCRServo extends OpMode
         {
             if (!OutOfPosition)
             {
-                Servo1.setPower(-1); //Also some way to adjust with feedback from servo, should stop at 90 degrees
-                Servo4.setPower(-1); //Also some way to adjust with feedback from servo, should stop at 90 degrees
+                Servo1.setPosition(Servo1.getPosition() + 0.07); //Replace position modifier with whatever is 90 degrees
+                Servo4.setPosition(Servo1.getPosition() + 0.07); //Replace position modifier with whatever is 90 degrees
                 OutOfPosition = true;
             }
 
             if (angles.firstAngle - HeadingAdjust <= 0 && angles.firstAngle - HeadingAdjust >= -90)
             {
-                Servo1.setPower(-1); //Also some way to adjust with feedback from servo, should stop at 90 degrees
+                Servo1.setPosition(Servo1.getPosition() - 0.07); //Replace position modifier with whatever is 90 degrees
                 Motor1.setPower(-1);
-                Servo2.setPower(-1); //Also some way to adjust with feedback from servo, should stop at 90 degrees
+                Servo2.setPosition(Servo1.getPosition() - 0.07); //Replace position modifier with whatever is 90 degrees
                 Motor2.setPower(-gamepad1.left_stick_y);
-                Servo4.setPower(-1); //Same deal as before
+                Servo4.setPosition(Servo1.getPosition() - 0.07); //Replace position modifier with whatever is 90 degrees
                 Motor4.setPower(-1);
-                Servo3.setPower(-1); //Also some way to adjust with feedback from servo, should stop at 90 degrees
+                Servo3.setPosition(Servo1.getPosition() - 0.07); //Replace position modifier with whatever is 90 degrees
                 Motor3.setPower(gamepad1.left_stick_y);
                 while (angles.firstAngle - HeadingAdjust <= 0 && angles.firstAngle - HeadingAdjust >= -90)
                 {
-                    //Keep servos in position
+                    Servo1.setPosition(Servo1.getPosition() - 0.0007777 * (angles.firstAngle - HeadingAdjust));
+                    Servo2.setPosition(Servo1.getPosition() - 0.0007777 * (angles.firstAngle - HeadingAdjust));
+                    Servo3.setPosition(Servo1.getPosition() - 0.0007777 * (angles.firstAngle - HeadingAdjust));
+                    Servo4.setPosition(Servo1.getPosition() - 0.0007777 * (angles.firstAngle - HeadingAdjust));
                 }
             }
             else if (angles.firstAngle - HeadingAdjust <= -90 && angles.firstAngle - HeadingAdjust >= -180)
             {
-                Servo2.setPower(-1); //Also some way to adjust with feedback from servo, should stop at 90 degrees
+                Servo2.setPosition(Servo1.getPosition() - 0.07); //Replace position modifier with whatever is 90 degrees
                 Motor2.setPower(-1);
-                Servo1.setPower(-1); //Also some way to adjust with feedback from servo, should stop at 90 degrees
+                Servo1.setPosition(Servo1.getPosition() - 0.07); //Replace position modifier with whatever is 90 degrees
                 Motor1.setPower(-gamepad1.left_stick_y);
-                Servo3.setPower(-1); //Same deal as before
+                Servo3.setPosition(Servo1.getPosition() - 0.07); //Replace position modifier with whatever is 90 degrees
                 Motor3.setPower(-1);
-                Servo4.setPower(-1); //Also some way to adjust with feedback from servo, should stop at 90 degrees
+                Servo4.setPosition(Servo1.getPosition() - 0.07); //Replace position modifier with whatever is 90 degrees
                 Motor4.setPower(gamepad1.left_stick_y);
                 while (angles.firstAngle - HeadingAdjust <= -90 && angles.firstAngle - HeadingAdjust >= -180)
                 {
-                    //Keep servos in position
+                    Servo1.setPosition(Servo1.getPosition() - 0.0007777 * (angles.firstAngle - HeadingAdjust));
+                    Servo2.setPosition(Servo1.getPosition() - 0.0007777 * (angles.firstAngle - HeadingAdjust));
+                    Servo3.setPosition(Servo1.getPosition() - 0.0007777 * (angles.firstAngle - HeadingAdjust));
+                    Servo4.setPosition(Servo1.getPosition() - 0.0007777 * (angles.firstAngle - HeadingAdjust));
                 }
             }
             else if (angles.firstAngle - HeadingAdjust <= 180 && angles.firstAngle - HeadingAdjust >= 90)
             {
-                Servo1.setPower(-1); //Also some way to adjust with feedback from servo, should stop at 90 degrees
+                Servo1.setPosition(Servo1.getPosition() - 0.07); //Replace position modifier with whatever is 90 degrees
                 Motor1.setPower(-1);
-                Servo2.setPower(-1); //Also some way to adjust with feedback from servo, should stop at 90 degrees
+                Servo2.setPosition(Servo1.getPosition() - 0.07); //Replace position modifier with whatever is 90 degrees
                 Motor2.setPower(gamepad1.left_stick_y);
-                Servo4.setPower(-1); //Same deal as before
+                Servo4.setPosition(Servo1.getPosition() - 0.07); //Replace position modifier with whatever is 90 degrees
                 Motor4.setPower(-1);
-                Servo3.setPower(-1); //Also some way to adjust with feedback from servo, should stop at 90 degrees
+                Servo3.setPosition(Servo1.getPosition() - 0.07); //Replace position modifier with whatever is 90 degrees
                 Motor3.setPower(-gamepad1.left_stick_y);
                 while (angles.firstAngle - HeadingAdjust <= 180 && angles.firstAngle - HeadingAdjust >= 90)
                 {
-                    //Keep servos in position
+                    Servo1.setPosition(Servo1.getPosition() - 0.0007777 * (angles.firstAngle - HeadingAdjust));
+                    Servo2.setPosition(Servo1.getPosition() - 0.0007777 * (angles.firstAngle - HeadingAdjust));
+                    Servo3.setPosition(Servo1.getPosition() - 0.0007777 * (angles.firstAngle - HeadingAdjust));
+                    Servo4.setPosition(Servo1.getPosition() - 0.0007777 * (angles.firstAngle - HeadingAdjust));
                 }
             }
             else if (angles.firstAngle - HeadingAdjust <= 90 && angles.firstAngle - HeadingAdjust >= 0)
             {
-                Servo2.setPower(-1); //Also some way to adjust with feedback from servo, should stop at 90 degrees
+                Servo2.setPosition(Servo1.getPosition() - 0.07); //Replace position modifier with whatever is 90 degrees
                 Motor2.setPower(-1);
-                Servo1.setPower(-1); //Also some way to adjust with feedback from servo, should stop at 90 degrees
+                Servo1.setPosition(Servo1.getPosition() - 0.07); //Replace position modifier with whatever is 90 degrees
                 Motor1.setPower(gamepad1.left_stick_y);
-                Servo3.setPower(-1); //Same deal as before
+                Servo3.setPosition(Servo1.getPosition() - 0.07); //Replace position modifier with whatever is 90 degrees
                 Motor3.setPower(-1);
-                Servo4.setPower(-1); //Also some way to adjust with feedback from servo, should stop at 90 degrees
+                Servo4.setPosition(Servo1.getPosition() - 0.07); //Replace position modifier with whatever is 90 degrees
                 Motor4.setPower(-gamepad1.left_stick_y);
                 while (angles.firstAngle - HeadingAdjust <= 90 && angles.firstAngle - HeadingAdjust >= 0)
                 {
-                    //Keep servos in position
+                    Servo1.setPosition(Servo1.getPosition() - 0.0007777 * (angles.firstAngle - HeadingAdjust));
+                    Servo2.setPosition(Servo1.getPosition() - 0.0007777 * (angles.firstAngle - HeadingAdjust));
+                    Servo3.setPosition(Servo1.getPosition() - 0.0007777 * (angles.firstAngle - HeadingAdjust));
+                    Servo4.setPosition(Servo1.getPosition() - 0.0007777 * (angles.firstAngle - HeadingAdjust));
                 }
             }
         }
@@ -254,10 +274,10 @@ public class SwerveDriveFirstTryCRServo extends OpMode
             Motor3.setPower(gamepad1.left_stick_y);
             Motor4.setPower(gamepad1.left_stick_y);
 
-            Servo1.setPower(gamepad1.right_stick_x);
-            Servo2.setPower(gamepad1.right_stick_x);
-            Servo3.setPower(gamepad1.right_stick_x);
-            Servo4.setPower(gamepad1.right_stick_x);
+            Servo1.setPosition(0.0007777 * gamepad1.right_stick_x + 0.07);
+            Servo2.setPosition(0.0007777 * gamepad1.right_stick_x + 0.07);
+            Servo3.setPosition(0.0007777 * gamepad1.right_stick_x + 0.07);
+            Servo4.setPosition(0.0007777 * gamepad1.right_stick_x + 0.07);
         }
     }
 
@@ -270,7 +290,9 @@ public class SwerveDriveFirstTryCRServo extends OpMode
 
     void ResetServos ()
     {
-        //Put servos to same position using feedback from servos
+        Servo2.setPosition(Servo1.getPosition());
+        Servo3.setPosition(Servo1.getPosition());
+        Servo4.setPosition(Servo1.getPosition());
     }
     void composeTelemetry() {
 

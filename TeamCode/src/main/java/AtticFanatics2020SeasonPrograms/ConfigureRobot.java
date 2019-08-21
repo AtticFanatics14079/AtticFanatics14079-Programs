@@ -29,7 +29,16 @@ public class ConfigureRobot extends LinearOpMode {
     Orientation angles;
     Acceleration gravity;
 
-
+    public void ResetMotorEncoders(DcMotor Motor1, DcMotor Motor2, DcMotor Motor3, DcMotor Motor4){
+        Motor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Motor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Motor3.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Motor4.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Motor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        Motor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        Motor3.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        Motor4.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
 
     public void Configure(DcMotor Motor1, DcMotor Motor2, DcMotor Motor3, DcMotor Motor4) {
 

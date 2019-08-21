@@ -7,10 +7,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 public class TestingClassReferences extends LinearOpMode{
 
     private DcMotor Motor1 = null;
-    private DcMotor Motor2 = null;
-    private DcMotor Motor3 = null;
-    private DcMotor Motor4 = null;
-    public static boolean Configured = false;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -19,5 +15,11 @@ public class TestingClassReferences extends LinearOpMode{
         RobotMecanum vera = new RobotMecanum();
 
         vera.SetMotorPower(Motor1, .5);
+
+        vera.MoveEncoderTicks(20);
+
+        vera.SidewaysMovement(30);
+
+        vera.TurnUsingIMU(80);
     }
 }
