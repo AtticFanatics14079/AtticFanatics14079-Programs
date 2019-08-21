@@ -7,6 +7,10 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 public class TestingClassReferences extends LinearOpMode{
 
     private DcMotor Motor1 = null;
+    private DcMotor Motor2 = null;
+    private DcMotor Motor3 = null;
+    private DcMotor Motor4 = null;
+    public static boolean Configured = false;
 
     @Override
     public void runOpMode() throws InterruptedException {
