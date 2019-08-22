@@ -7,10 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 public class TestingClassReferences extends LinearOpMode{
 
     private DcMotor Motor1 = null;
-    private DcMotor Motor2 = null;
-    private DcMotor Motor3 = null;
-    private DcMotor Motor4 = null;
-    public static boolean Configured = false;
+    boolean Configured = false;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -18,12 +15,12 @@ public class TestingClassReferences extends LinearOpMode{
         //The next line instantiates a supplementary class. The "Vera" variable can be any name as long as it is referenced by the same name later, but we're keepin it this way for now gang cause Vera carried this one.
         RobotMecanum vera = new RobotMecanum();
 
-        vera.SetMotorPower(Motor1, .5);
+        vera.SetMotorPower(.5);
 
-        vera.MoveEncoderTicks(20);
+        vera.MoveEncoderTicks(20, Configured);
 
-        vera.SidewaysMovement(30);
+        vera.SidewaysMovement(30, Configured);
 
-        vera.TurnUsingIMU(80);
+        vera.TurnUsingIMU(80, Configured);
     }
 }

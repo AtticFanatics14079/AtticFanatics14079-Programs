@@ -48,6 +48,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
 import java.util.Locale;
 
+@Disabled
 public class RobotMecanum extends LinearOpMode{
 
     DcMotor Motor1;
@@ -55,7 +56,6 @@ public class RobotMecanum extends LinearOpMode{
     DcMotor Motor3;
     DcMotor Motor4;
     BNO055IMU imu;
-    boolean Configured = false;
 
     Orientation angles;
     Acceleration gravity;
@@ -65,12 +65,12 @@ public class RobotMecanum extends LinearOpMode{
     public void runOpMode() throws InterruptedException {
     }
 
-    public void SetMotorPower (DcMotor a, double b) {
-        Config.Configure(a, Motor2, Motor3, Motor4);
-        a.setPower(b);
+    public void SetMotorPower (double b) {
+        Config.Configure(Motor1, Motor2, Motor3, Motor4);
+        Motor1.setPower(b);
     }
 
-    public void MoveEncoderTicks(double NumbCM) {
+    public void MoveEncoderTicks(double NumbCM, boolean Configured) {
 
         if (!Configured)
         {
@@ -152,7 +152,7 @@ public class RobotMecanum extends LinearOpMode{
         Motor4.setPower(0);
     }
 
-    public void TurnUsingIMU(int Degrees) //DO NOT TURN CLOSE TO A 180; INSTEAD JUST TURN UP TO 90 AND GO SIDEWAYS OR BACKWARDS
+    public void TurnUsingIMU(int Degrees, boolean Configured) //DO NOT TURN CLOSE TO A 180; INSTEAD JUST TURN UP TO 90 AND GO SIDEWAYS OR BACKWARDS
     {
 
         if (!Configured)
@@ -272,7 +272,7 @@ public class RobotMecanum extends LinearOpMode{
         }
     }
 
-    public void SidewaysMovement(double NumbCM) {
+    public void SidewaysMovement(double NumbCM, boolean Configured) {
 
         if (!Configured)
         {
