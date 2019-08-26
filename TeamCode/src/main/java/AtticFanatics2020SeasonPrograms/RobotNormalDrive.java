@@ -20,11 +20,9 @@ import java.util.Locale;
 
 public class RobotNormalDrive extends LinearOpMode{
 
-    DcMotor Motor1;
-    DcMotor Motor2;
-    DcMotor Motor3;
-    DcMotor Motor4;
     BNO055IMU imu;
+
+    DcMotor[] Motors;
 
     Orientation angles;
     Acceleration gravity;
@@ -34,15 +32,18 @@ public class RobotNormalDrive extends LinearOpMode{
     public void runOpMode() throws InterruptedException {
     }
 
-    public void MoveEncoderTicks(double NumbCM, boolean Configured) {
+    public boolean MoveEncoderTicks(double NumbCM, boolean Configured) {
 
+        telemetry.addLine("(2) About to check for configured");
         if (!Configured)
         {
-            Config.Configure(Motor1, Motor2, Motor3, Motor4);
+            telemetry.addLine("(3) About to configure");
+            Motors = Config.Configure(Motors);
             Configured = true;
         }
 
-        Config.ResetMotorEncoders(Motor1, Motor2, Motor3, Motor4);
+        telemetry.addLine("(6) Configured, resetting motor encoders");
+        Config.ResetMotorEncoders(Motors[1], Motors[2], Motors[3], Motors[4]);
 
         angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
@@ -50,83 +51,91 @@ public class RobotNormalDrive extends LinearOpMode{
 
         double TurnAmount;
 
-        Motor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        Motor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        Motor3.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        Motor4.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        telemetry.addLine("(7) About to set motors to Run_To_Position");
+        Motors[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        Motors[2].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        Motors[3].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        Motors[4].setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         //Mess with numbers, as different circumference.
         double Ticks = 36.1275 * NumbCM;
 
-        Motor1.setTargetPosition((int) Ticks);
-        Motor2.setTargetPosition((int) Ticks);
-        Motor3.setTargetPosition((int) Ticks);
-        Motor4.setTargetPosition((int) Ticks);
+        Motors[1].setTargetPosition((int) Ticks);
+        Motors[2].setTargetPosition((int) Ticks);
+        Motors[3].setTargetPosition((int) Ticks);
+        Motors[4].setTargetPosition((int) Ticks);
 
-        if (Motor1.getTargetPosition() > 0) {
-            Motor1.setPower(1);
-            Motor2.setPower(1);
-            Motor3.setPower(1);
-            Motor4.setPower(1);
+        telemetry.addLine("(8) About to run");
+        if (Motors[1].getTargetPosition() > 0) {
+            Motors[1].setPower(1);
+            Motors[2].setPower(1);
+            Motors[3].setPower(1);
+            Motors[4].setPower(1);
         } else {
-            Motor1.setPower(-1);
-            Motor2.setPower(-1);
-            Motor3.setPower(-1);
-            Motor4.setPower(-1);
+            Motors[1].setPower(-1);
+            Motors[2].setPower(-1);
+            Motors[3].setPower(-1);
+            Motors[4].setPower(-1);
         }
 
-        while (Motor1.isBusy() || Motor2.isBusy() || Motor3.isBusy() || Motor4.isBusy()) {
+        while (Motors[1].isBusy() || Motors[2].isBusy() || Motors[3].isBusy() || Motors[4].isBusy()) {
             telemetry.update();
             TurnAmount = angles.firstAngle - HeadingAdjust;
-            if (TurnAmount > .3 && Motor1.getPower() > 0) {
-                Motor2.setPower(1);
-                Motor4.setPower(1);
-                Motor1.setPower(.9);
-                Motor3.setPower(.9);
-            } else if (TurnAmount > .3 && Motor1.getPower() < 0) {
-                Motor2.setPower(-.9);
-                Motor4.setPower(-.9);
-                Motor1.setPower(-1);
-                Motor3.setPower(-1);
-            } else if (TurnAmount < -.3 && Motor1.getPower() > 0) {
-                Motor1.setPower(1);
-                Motor3.setPower(1);
-                Motor2.setPower(.9);
-                Motor4.setPower(.9);
-            } else if (TurnAmount < -.3 && Motor1.getPower() < 0) {
-                Motor1.setPower(-.9);
-                Motor3.setPower(-.9);
-                Motor2.setPower(-1);
-                Motor4.setPower(-1);
-            } else if (Motor1.getPower() > 0) {
-                Motor1.setPower(1);
-                Motor2.setPower(1);
-                Motor3.setPower(1);
-                Motor4.setPower(1);
+            telemetry.addLine("This is about to use IMU, I doubt the IMU will work");
+            if (TurnAmount > .3 && Motors[1].getPower() > 0) {
+                Motors[2].setPower(1);
+                Motors[4].setPower(1);
+                Motors[1].setPower(.9);
+                Motors[3].setPower(.9);
+            } else if (TurnAmount > .3 && Motors[1].getPower() < 0) {
+                Motors[2].setPower(-.9);
+                Motors[4].setPower(-.9);
+                Motors[1].setPower(-1);
+                Motors[3].setPower(-1);
+            } else if (TurnAmount < -.3 && Motors[1].getPower() > 0) {
+                Motors[1].setPower(1);
+                Motors[3].setPower(1);
+                Motors[2].setPower(.9);
+                Motors[4].setPower(.9);
+            } else if (TurnAmount < -.3 && Motors[1].getPower() < 0) {
+                Motors[1].setPower(-.9);
+                Motors[3].setPower(-.9);
+                Motors[2].setPower(-1);
+                Motors[4].setPower(-1);
+            } else if (Motors[1].getPower() > 0) {
+                Motors[1].setPower(1);
+                Motors[2].setPower(1);
+                Motors[3].setPower(1);
+                Motors[4].setPower(1);
             } else {
-                Motor1.setPower(-1);
-                Motor2.setPower(-1);
-                Motor3.setPower(-1);
-                Motor4.setPower(-1);
+                Motors[1].setPower(-1);
+                Motors[2].setPower(-1);
+                Motors[3].setPower(-1);
+                Motors[4].setPower(-1);
             }
         }
 
-        Motor1.setPower(0);
-        Motor2.setPower(0);
-        Motor3.setPower(0);
-        Motor4.setPower(0);
+        Motors[1].setPower(0);
+        Motors[2].setPower(0);
+        Motors[3].setPower(0);
+        Motors[4].setPower(0);
+
+        telemetry.addLine("(8) Robot should have moved");
+
+        return Configured;
     }
 
-    public void TurnUsingIMU(int Degrees, boolean Configured) //DO NOT TURN CLOSE TO A 180; INSTEAD JUST TURN UP TO 90 AND GO SIDEWAYS OR BACKWARDS
+    public boolean TurnUsingIMU(int Degrees, boolean Configured) //DO NOT TURN CLOSE TO A 180; INSTEAD JUST TURN UP TO 90 AND GO SIDEWAYS OR BACKWARDS
     {
+        //TURNING RIGHT IS POSITIVE!!!
 
         if (!Configured)
         {
-            Config.Configure(Motor1, Motor2, Motor3, Motor4);
+            Motors = Config.Configure(Motors);
             Configured = true;
         }
 
-        Config.ResetMotorEncoders(Motor1, Motor2, Motor3, Motor4);
+        Config.ResetMotorEncoders(Motors[1], Motors[2], Motors[3], Motors[4]);
 
         angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
@@ -135,31 +144,31 @@ public class RobotNormalDrive extends LinearOpMode{
         //Mess with numbers, as different circumference.
         double Ticks = Degrees * 19.8;
 
-        Motor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        Motor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        Motor3.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        Motor4.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        Motors[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        Motors[2].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        Motors[3].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        Motors[4].setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        Motor2.setTargetPosition((int) (-1 * Ticks));
-        Motor1.setTargetPosition((int) Ticks);
-        Motor4.setTargetPosition((int) (-1 * Ticks));
-        Motor3.setTargetPosition((int) Ticks);
+        Motors[2].setTargetPosition((int) (-1 * Ticks));
+        Motors[1].setTargetPosition((int) Ticks);
+        Motors[4].setTargetPosition((int) (-1 * Ticks));
+        Motors[3].setTargetPosition((int) Ticks);
 
         double TurnAmount;
 
-        if (Motor1.getTargetPosition() < 0) {
-            Motor1.setPower(-1);
-            Motor2.setPower(1);
-            Motor3.setPower(-1);
-            Motor4.setPower(1);
+        if (Motors[1].getTargetPosition() < 0) {
+            Motors[1].setPower(-1);
+            Motors[2].setPower(1);
+            Motors[3].setPower(-1);
+            Motors[4].setPower(1);
         } else {
-            Motor1.setPower(1);
-            Motor2.setPower(-1);
-            Motor3.setPower(1);
-            Motor4.setPower(-1);
+            Motors[1].setPower(1);
+            Motors[2].setPower(-1);
+            Motors[3].setPower(1);
+            Motors[4].setPower(-1);
         }
 
-        while (Motor1.isBusy() || Motor2.isBusy() || Motor3.isBusy() || Motor4.isBusy()) {
+        while (Motors[1].isBusy() || Motors[2].isBusy() || Motors[3].isBusy() || Motors[4].isBusy()) {
             telemetry.update();
         }
 
@@ -171,70 +180,72 @@ public class RobotNormalDrive extends LinearOpMode{
 
             if ((Degrees - TurnAmount > -1) && (Degrees - TurnAmount < 1)) {
 
-                Motor1.setPower(0);
-                Motor2.setPower(0);
-                Motor3.setPower(0);
-                Motor4.setPower(0);
+                Motors[1].setPower(0);
+                Motors[2].setPower(0);
+                Motors[3].setPower(0);
+                Motors[4].setPower(0);
 
                 break;
 
             }
             else if ((Degrees - TurnAmount >= 1) && (TurnAmount >= 0)) {
 
-                Config.ResetMotorEncoders(Motor1, Motor2, Motor3, Motor4);
+                Config.ResetMotorEncoders(Motors[1], Motors[2], Motors[3], Motors[4]);
 
-                Motor2.setTargetPosition((int) (-.3 * (Degrees - TurnAmount)));
-                Motor4.setTargetPosition((int) (-.3 * (Degrees - TurnAmount)));
-                Motor1.setTargetPosition((int) (.3 * (Degrees - TurnAmount)));
-                Motor3.setTargetPosition((int) (.3 * (Degrees - TurnAmount)));
+                Motors[2].setTargetPosition((int) (-.3 * (Degrees - TurnAmount)));
+                Motors[4].setTargetPosition((int) (-.3 * (Degrees - TurnAmount)));
+                Motors[1].setTargetPosition((int) (.3 * (Degrees - TurnAmount)));
+                Motors[3].setTargetPosition((int) (.3 * (Degrees - TurnAmount)));
 
-                Motor2.setPower(-.2);
-                Motor1.setPower(.2);
-                Motor4.setPower(-.2);
-                Motor3.setPower(.2);
+                Motors[2].setPower(-.2);
+                Motors[1].setPower(.2);
+                Motors[4].setPower(-.2);
+                Motors[3].setPower(.2);
             }
             else if (Degrees - TurnAmount <= -1) {
 
-                Config.ResetMotorEncoders(Motor1, Motor2, Motor3, Motor4);
+                Config.ResetMotorEncoders(Motors[1], Motors[2], Motors[3], Motors[4]);
 
-                Motor2.setTargetPosition((int) (.3 * (Degrees - TurnAmount)));
-                Motor4.setTargetPosition((int) (.3 * (Degrees - TurnAmount)));
-                Motor1.setTargetPosition((int) (-.3 * (Degrees - TurnAmount)));
-                Motor3.setTargetPosition((int) (-.3 * (Degrees - TurnAmount)));
+                Motors[2].setTargetPosition((int) (.3 * (Degrees - TurnAmount)));
+                Motors[4].setTargetPosition((int) (.3 * (Degrees - TurnAmount)));
+                Motors[1].setTargetPosition((int) (-.3 * (Degrees - TurnAmount)));
+                Motors[3].setTargetPosition((int) (-.3 * (Degrees - TurnAmount)));
 
-                Motor2.setPower(.2);
-                Motor1.setPower(-.2);
-                Motor4.setPower(.2);
-                Motor3.setPower(-.2);
+                Motors[2].setPower(.2);
+                Motors[1].setPower(-.2);
+                Motors[4].setPower(.2);
+                Motors[3].setPower(-.2);
             }
             else if (-1 * Degrees + TurnAmount <= -1) {
 
-                Config.ResetMotorEncoders(Motor1, Motor2, Motor3, Motor4);
+                Config.ResetMotorEncoders(Motors[1], Motors[2], Motors[3], Motors[4]);
 
-                Motor2.setTargetPosition((int) (-.3 * (Degrees - TurnAmount))); //Numbers off, fix using math.
-                Motor4.setTargetPosition((int) (-.3 * (Degrees - TurnAmount)));
-                Motor1.setTargetPosition((int) (.3 * (Degrees - TurnAmount)));
-                Motor3.setTargetPosition((int) (.3 * (Degrees - TurnAmount)));
+                Motors[2].setTargetPosition((int) (-.3 * (Degrees - TurnAmount))); //Numbers off, fix using math.
+                Motors[4].setTargetPosition((int) (-.3 * (Degrees - TurnAmount)));
+                Motors[1].setTargetPosition((int) (.3 * (Degrees - TurnAmount)));
+                Motors[3].setTargetPosition((int) (.3 * (Degrees - TurnAmount)));
 
-                Motor2.setPower(-.2);
-                Motor1.setPower(.2);
-                Motor4.setPower(-.2);
-                Motor3.setPower(.2);
+                Motors[2].setPower(-.2);
+                Motors[1].setPower(.2);
+                Motors[4].setPower(-.2);
+                Motors[3].setPower(.2);
             }
             else {
 
-                Config.ResetMotorEncoders(Motor1, Motor2, Motor3, Motor4);
+                Config.ResetMotorEncoders(Motors[1], Motors[1], Motors[1], Motors[1]);
 
-                Motor2.setTargetPosition((int) (.3 * (Degrees - TurnAmount)));
-                Motor4.setTargetPosition((int) (.3 * (Degrees - TurnAmount)));
-                Motor1.setTargetPosition((int) (-.3 * (Degrees - TurnAmount)));
-                Motor3.setTargetPosition((int) (-.3 * (Degrees - TurnAmount)));
+                Motors[2].setTargetPosition((int) (.3 * (Degrees - TurnAmount)));
+                Motors[4].setTargetPosition((int) (.3 * (Degrees - TurnAmount)));
+                Motors[1].setTargetPosition((int) (-.3 * (Degrees - TurnAmount)));
+                Motors[3].setTargetPosition((int) (-.3 * (Degrees - TurnAmount)));
 
-                Motor2.setPower(.2);
-                Motor1.setPower(-.2);
-                Motor4.setPower(.2);
-                Motor3.setPower(-.2);
+                Motors[2].setPower(.2);
+                Motors[1].setPower(-.2);
+                Motors[4].setPower(.2);
+                Motors[3].setPower(-.2);
             }
         }
+
+        return Configured;
     }
 }

@@ -20,10 +20,6 @@ import java.util.Locale;
 
 public class ConfigureRobot extends LinearOpMode {
 
-    DcMotor Motor1;
-    DcMotor Motor2;
-    DcMotor Motor3;
-    DcMotor Motor4;
     BNO055IMU imu;
 
     Orientation angles;
@@ -40,8 +36,9 @@ public class ConfigureRobot extends LinearOpMode {
         Motor4.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    public void Configure(DcMotor Motor1, DcMotor Motor2, DcMotor Motor3, DcMotor Motor4) {
-
+    public DcMotor[] Configure(DcMotor[] Motors)
+    {
+        telemetry.addLine("(4) Entered Configure function");
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
         parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
@@ -50,22 +47,25 @@ public class ConfigureRobot extends LinearOpMode {
         parameters.loggingTag = "IMU";
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
-        Motor1 = hardwareMap.get(DcMotor.class, "motor_1");
-        Motor2 = hardwareMap.get(DcMotor.class, "motor_2");
-        Motor3 = hardwareMap.get(DcMotor.class, "motor_3");
-        Motor4 = hardwareMap.get(DcMotor.class, "motor_4");
+        telemetry.addLine("(5) About to hardwareMap");
+        Motors[1] = hardwareMap.get(DcMotor.class, "motor_1");
+        Motors[2] = hardwareMap.get(DcMotor.class, "motor_2");
+        Motors[3] = hardwareMap.get(DcMotor.class, "motor_3");
+        Motors[4] = hardwareMap.get(DcMotor.class, "motor_4");
 
-        Motor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        Motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        Motor3.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        Motor4.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        Motors[1].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        Motors[2].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        Motors[3].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        Motors[4].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        Motor2.setDirection(DcMotor.Direction.REVERSE);
-        Motor4.setDirection(DcMotor.Direction.REVERSE);
+        Motors[2].setDirection(DcMotor.Direction.REVERSE);
+        Motors[4].setDirection(DcMotor.Direction.REVERSE);
 
         composeTelemetry();
 
         imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
+
+        return Motors;
         }
 
     void composeTelemetry () {
